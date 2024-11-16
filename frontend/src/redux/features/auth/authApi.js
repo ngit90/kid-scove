@@ -59,7 +59,8 @@ const authApi = createApi({
             method: "PATCH",
             body: profileData
           }),
-    })
+          invalidatesTags: ["User"], // Add this to update cached user data
+    }),
   }),
 });
 

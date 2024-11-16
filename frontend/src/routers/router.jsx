@@ -23,6 +23,7 @@ import UpdateProduct from "../pages/dashboard/admin/manageProduct/UpdateProduct"
 import ManageUser from "../pages/dashboard/admin/users/ManageUser";
 import ManageOrders from "../pages/dashboard/admin/manageOrders/ManageOrders";
 import Aboutpage from "../pages/about/About";
+import Contactpage from "../pages/contact/Contact";
 
 const router = createBrowserRouter([
     {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
             { path: "/", element: <Home /> },
             { path: "/categories/:categoryName", element: <CategoryPage /> },
             { path: "/about", element: <Aboutpage /> },
+            { path: "/contact", element: <Contactpage /> },
             { path: "/search", element: <Search /> },
             { path: "/shop", element: <ShopPage /> },
             { path: "/shop/:id", element: <SingleProduct /> },
@@ -88,13 +90,12 @@ const router = createBrowserRouter([
             },
             { path: "users", element: <PrivateRoute role="admin"><ManageUser/></PrivateRoute> },
             { path: "manage-orders", 
-            element: <PrivateRoute role="admin">
-                <ManageOrders/>
-                </PrivateRoute> 
+              element: <PrivateRoute role="admin"><ManageOrders/></PrivateRoute> 
             },
         ]
     }
 
-]);
+]
+);
 
 export default router;
