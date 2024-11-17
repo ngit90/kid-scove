@@ -22,18 +22,18 @@ const ShopFiltering = ({filters, filtersState, setFiltersState, clearFilters}) =
             }
         </div>
 
-        {/* colors */}
+        {/* agegroup */}
         <div className='flex flex-col space-y-2'>
-            <h4 className='font-medium text-lg'>Color</h4>
+            <h4 className='font-medium text-lg'>AgeGroup</h4>
             <hr />
             {
-                filters.colors.map((color) => (
-                    <label key={color} className='capitalize cursor-pointer'>
-                        <input type="radio" name="color" id="color" value={color} 
-                        checked={filtersState.color === color}
-                        onChange={(e) => setFiltersState({...filtersState, color: e.target.value})}
+                filters.agegroup.map((agegroup) => (
+                    <label key={agegroup} className='capitalize cursor-pointer'>
+                        <input type="radio" name="agegroup" id="agegroup" value={agegroup} 
+                        checked={filtersState.agegroup === agegroup}
+                        onChange={(e) => setFiltersState({...filtersState, agegroup: e.target.value})}
                         />
-                        <span className='ml-1'>{color}</span>
+                        <span className='ml-1'>{agegroup}</span>
                     </label>
                 ))
             }

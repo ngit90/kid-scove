@@ -12,7 +12,7 @@ const productsApi = createApi({
     fetchAllProducts: builder.query({
       query: ({
         category,
-        color,
+        agegroup,
         minPrice,
         maxPrice,
         page = 1,
@@ -20,7 +20,7 @@ const productsApi = createApi({
       }) => {
         const queryParams = new URLSearchParams({
           category: category || "",
-          color: color || "",
+          agegroup: agegroup || "",
           minPrice: minPrice || 0,
           maxPrice: maxPrice || "",
           page: page.toString(),
@@ -35,6 +35,15 @@ const productsApi = createApi({
     fetchProductById: builder.query({
       query: (id) => `/${id}`,
       providesTags: (result, error, id) => [{ type: "Products", id }],
+    }),
+
+    getProducts: builder.query({
+      query: () => ({
+        url: "/products",   //new query
+        method: "GET",
+      }),
+      refetchOnMount: true,
+      invalidatesTags: ["Products"],
     }),
 
     AddProduct: builder.mutation({
@@ -71,6 +80,6 @@ const productsApi = createApi({
   }),
 });
 
-export const {useFetchAllProductsQuery, useFetchProductByIdQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery} = productsApi;
+export const {useFetchAllProductsQuery, useFetchProductByIdQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery, usegetProductsQuery} = productsApi;
 
 export default productsApi;

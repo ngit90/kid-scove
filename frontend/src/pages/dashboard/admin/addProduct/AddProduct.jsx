@@ -9,20 +9,20 @@ import { useNavigate } from 'react-router-dom';
 const categories = [
     { label: 'Select Category', value: '' },
     { label: 'Accessories', value: 'accessories' },
-    { label: 'Dress', value: 'dress' },
-    { label: 'Jewellery', value: 'jewellery' },
-    { label: 'Cosmetics', value: 'cosmetics' }
+    { label: 'Dress-Boys', value: 'dress-boys' },
+    { label: 'Dress-Girls', value: 'dress-girls' },
+    { label: 'Footwear-Boys', value: 'footwear-boys' },
+    { label: 'Footwear-Girls', value: 'footwear-girls' },
+    { label: 'Toys', value: 'toys' }
 ];
 
-const colors = [
-    { label: 'Select Color', value: '' },
-    { label: 'Black', value: 'black' },
-    { label: 'Red', value: 'red' },
-    { label: 'Gold', value: 'gold' },
-    { label: 'Blue', value: 'blue' },
-    { label: 'Silver', value: 'silver' },
-    { label: 'Beige', value: 'beige' },
-    { label: 'Green', value: 'green' }
+const agegroup = [
+    { label: 'Select Agegroup', value: '' },
+    { label: 'Newborn', value: 'Newborn' },
+    { label: '3to12_Months', value: '3to12_Months' },
+    { label: '1to2_Years', value: '1to2_Years' },
+    { label: '3to5_Years', value: '3to5_Years' },
+    { label: '5to10_Years', value: '5to10_Years' },
 ];
 
 const AddProduct = () => {
@@ -31,7 +31,7 @@ const AddProduct = () => {
     const [product, setProduct] = useState({
         name: '',
         category: '',
-        color: '',
+        agegroup: '',
         price: '',
         description: ''
     });
@@ -54,7 +54,7 @@ const AddProduct = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        if(!product.name || !product.category || !product.price || !product.description || !product.color) {
+        if(!product.name || !product.category || !product.price || !product.description || !product.agegroup) {
             alert('Please fill all the required fields');
             return;
         }
@@ -64,7 +64,7 @@ const AddProduct = () => {
             alert('Product added successfully');
             setProduct({ name: '',
                 category: '',
-                color: '',
+                agegroup: '',
                 price: '',
                 description: ''})
                 setImage('');
@@ -93,11 +93,11 @@ const AddProduct = () => {
                     options={categories}
                 />
                 <SelectInput
-                    label="Color"
-                    name="color"
-                    value={product.color}
+                    label="agegroup"
+                    name="agegroup"
+                    value={product.agegroup}
                     onChange={handleChange}
-                    options={colors}
+                    options={agegroup}
                 />
                 <TextInput
                     label="Price"

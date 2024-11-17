@@ -8,7 +8,7 @@ const ManageProduct = () => {
     const [productsPerPage] = useState(12)
     const { data: { products = [], totalPages, totalProducts } = {}, isLoading, error, refetch } = useFetchAllProductsQuery({
         category: '',
-        color: '',
+        agegroup: '',
         minPrice: '',
         maxPrice: '',
         page: currentPage,

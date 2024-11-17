@@ -36,7 +36,7 @@ router.get("/", async (req, res) => {
   try {
     const {
       category,
-      color,
+      agegroup,
       minPrice,
       maxPrice,
       page = 1,
@@ -49,8 +49,8 @@ router.get("/", async (req, res) => {
       filter.category = category;
     }
 
-    if (color && color !== "all") {
-      filter.color = color;
+    if (agegroup && agegroup !== "all") {
+      filter.agegroup = agegroup;
     }
 
     if (minPrice && maxPrice) {

@@ -9,20 +9,20 @@ import UploadImage from '../addProduct/UploadImage';
 const categories = [
     { label: 'Select Category', value: '' },
     { label: 'Accessories', value: 'accessories' },
-    { label: 'Dress', value: 'dress' },
-    { label: 'Jewellery', value: 'jewellery' },
-    { label: 'Cosmetics', value: 'cosmetics' }
+    { label: 'Dress-Boys', value: 'dress-boys' },
+    { label: 'Dress-Girls', value: 'dress-girls' },
+    { label: 'Footwear-Boys', value: 'footwear-boys' },
+    { label: 'Footwear-Girls', value: 'footwear-girls' },
+    { label: 'Toys', value: 'toys' }
 ];
 
-const colors = [
-    { label: 'Select Color', value: '' },
-    { label: 'Black', value: 'black' },
-    { label: 'Red', value: 'red' },
-    { label: 'Gold', value: 'gold' },
-    { label: 'Blue', value: 'blue' },
-    { label: 'Silver', value: 'silver' },
-    { label: 'Beige', value: 'beige' },
-    { label: 'Green', value: 'green' }
+const agegroup = [
+    { label: 'Select Agegroup', value: '' },
+    { label: 'Newborn', value: 'Newborn' },
+    { label: '3to12_Months', value: '3to12_Months' },
+    { label: '1to2_Years', value: '1to2_Years' },
+    { label: '3to5_Years', value: '3to5_Years' },
+    { label: '5to10_Years', value: '5to10_Years' },
 ];
 
 
@@ -33,7 +33,7 @@ const UpdateProduct = () => {
     const [product, setProduct] = useState({
         name: '',
         category: '',
-        color: '',
+        agegroup: '',
         price: '',
         description: '',
         image: ''
@@ -43,7 +43,7 @@ const UpdateProduct = () => {
 
     const [newImage, setNewImage] = useState(null)
 
-    const {name, category, color, description, image: imageURL, price } = productData?.product || {};
+    const {name, category, agegroup, description, image: imageURL, price } = productData?.product || {};
 
     const [updateProduct, {isLoading:isUpdating, error: updateError}] = useUpdateProductMutation();
 
@@ -52,7 +52,7 @@ const UpdateProduct = () => {
             setProduct({
                 name: name || '',
                 category: category || '',
-                color: color || '',
+                agegroup: agegroup || '',
                 price: price || '',
                 description: description || '',
                 image: imageURL || ''
@@ -116,11 +116,11 @@ const UpdateProduct = () => {
                     options={categories}
                 />
                 <SelectInput
-                    label="Color"
-                    name="color"
-                    value={product.color}
+                    label="agegroup"
+                    name="agegroup"
+                    value={product.agegroup}
                     onChange={handleChange}
-                    options={colors}
+                    options={agegroup}
                 />
                 <TextInput
                     label="Price"

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
-import productsData from "../../data/products.json"
+//import productsData from "../../data/products.json"
 import ProductCards from './ProductCards';
 import ShopFiltering from './ShopFiltering';
 import { useFetchAllProductsQuery } from '../../redux/features/products/productsApi';
 
 const filters = {
-    categories: ['all', 'accessories', 'dress', 'jewellery', 'cosmetics'],
-    colors: ['all', 'black', 'red', 'gold', 'blue', 'silver', 'beige', 'green'],
+    categories: ['all', 'accessories', 'dress-boys','dress-girls', 'footwear-boys','footwear-girls', 'toys'],
+    agegroup: ['all', 'Newborn', '3to12_Months', '1to2_Years', '3to5_Years', '5to10_Years'],
     priceRanges: [
-        { label: 'Under $50', min: 0, max: 50 },
-        { label: '$50 - $100', min: 50, max: 100 },
-        { label: '$100 - $200', min: 100, max: 200 },
-        { label: '$200 and above', min: 200, max: Infinity }
+        { label: 'Under 500', min: 0, max: 500 },
+        { label: '501 - 1000', min: 501, max: 1000 },
+        { label: '1001 - 2000', min: 1001, max: 2000 },
+        { label: '2001 and above', min: 2001, max: Infinity }
     ]
 };
 
@@ -20,19 +20,19 @@ const filters = {
 const ShopPage = () => {
     const [filtersState, setFiltersState] = useState({
         category: 'all',
-        color: 'all',
+        agegroup: 'all',
         priceRange: ''
     });
 
     const [currentPage, setCurrentPage] = useState(1);
     const [ProductsPerPage] = useState(8);
 
-    const { category, color, priceRange } = filtersState;
+    const { category, agegroup, priceRange } = filtersState;
     const [minPrice, maxPrice] = priceRange.split('-').map(Number);
 
     const { data: { products = [], totalPages, totalProducts } = {}, error, isLoading } = useFetchAllProductsQuery({
         category: category !== 'all' ? category : '',
-        color: color !== 'all' ? color : '',
+        cagegroup: agegroup !== 'all' ? agegroup : '',
         minPrice: isNaN(minPrice) ? '' : minPrice,
         maxPrice: isNaN(maxPrice) ? '' : maxPrice,
         page: currentPage,
@@ -43,7 +43,7 @@ const ShopPage = () => {
     const clearFilters = () => {
         setFiltersState({
             category: 'all',
-            color: 'all',
+            agegroup: 'all',
             priceRange: ''
         })
     }

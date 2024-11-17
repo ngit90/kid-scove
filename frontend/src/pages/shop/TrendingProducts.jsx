@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import ProductCards from './ProductCards'
-
-import products from "../../data/products.json"
+import { usegetProductsQuery } from '../../redux/features/products/productsApi';
+//import products from "../../data/products.json"
 
 const TrendingProducts = () => {
     const [visibleProducts, setVisibleProducts] = useState(8);
-
+    const { data: products = [], error, isLoading, refetch } = usegetProductsQuery();
+    
     const loadMoreProducts = () => {
         setVisibleProducts(prevCount => prevCount + 4)
     }
