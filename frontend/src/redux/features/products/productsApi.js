@@ -37,13 +37,13 @@ const productsApi = createApi({
       providesTags: (result, error, id) => [{ type: "Products", id }],
     }),
 
-    getProducts: builder.query({
+    GetProducts: builder.query({
       query: () => ({
-        url: "/products",   //new query
+        url: "/list",
         method: "GET",
       }),
-      refetchOnMount: true,
-      invalidatesTags: ["Products"],
+      refetchOnMountOrArgChange: true,
+      providesTags: ["Products"],
     }),
 
     AddProduct: builder.mutation({
@@ -80,6 +80,6 @@ const productsApi = createApi({
   }),
 });
 
-export const {useFetchAllProductsQuery, useFetchProductByIdQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery, usegetProductsQuery} = productsApi;
+export const {useFetchAllProductsQuery, useFetchProductByIdQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery, useGetProductsQuery} = productsApi;
 
 export default productsApi;

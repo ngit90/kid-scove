@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 
-import productsData from "../../data/products.json"
+//import productsData from "../../data/products.json"
 import ProductCards from '../shop/ProductCards';
+import { useGetProductsQuery } from '../../redux/features/products/productsApi';
 
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const { data: productsData = [], error, isLoading, refetch } = useGetProductsQuery();
     const [filteredProducts, setFilteredProducts] = useState(productsData);
 
     const handleSearch = () => {

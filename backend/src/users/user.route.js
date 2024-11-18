@@ -7,9 +7,15 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
+     // Validate input data
+     const { error } = User.validateUser({ username, email, password });
+     if (error) {
+     console.error('Validation Error:', error.details[0].message);
+     } else {
     const user = new User({ email, username, password });
     await user.save();
     res.status(201).send({ message: "User registered successfully!" });
+    }
   } catch (error) {
     console.error("Error registering user", error);
     res.status(500).send({ message: "Error registering user" });

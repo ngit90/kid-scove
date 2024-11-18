@@ -30,6 +30,16 @@ router.post("/create-product", async (req, res) => {
     res.status(500).send({ message: "Failed to create new product" });
   }
 });
+// get all products
+router.get("/list", async (req, res) => {
+  try {
+    const products = await Products.find({});
+    res.status(200).send(products);
+  } catch (error) {
+    console.error("Error fetching productss", error);
+    res.status(500).send({ message: "Error fetching products" });
+  }
+});
 
 // get all products
 router.get("/", async (req, res) => {
@@ -89,7 +99,7 @@ router.get("/:id", async (req, res) => {
     if (!product) {
       return res.status(404).send({ message: "Product not found" });
     }
-    const reviews = await Reviews.find({ productId }).populate(
+    const reviews = await Reviews.find({productId}).populate(
       "userId",
       "username email"
     );
@@ -183,5 +193,7 @@ router.get("/related/:id", async (req, res) => {
     res.status(500).send({ message: "Failed to fetch related products" });
   }
 });
+
+
 
 module.exports = router;

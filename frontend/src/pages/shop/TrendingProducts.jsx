@@ -1,24 +1,24 @@
 import React, { useState } from 'react'
 import ProductCards from './ProductCards'
-import { usegetProductsQuery } from '../../redux/features/products/productsApi';
+import { useGetProductsQuery } from '../../redux/features/products/productsApi';
 //import products from "../../data/products.json"
 
 const TrendingProducts = () => {
     const [visibleProducts, setVisibleProducts] = useState(8);
-    const { data: products = [], error, isLoading, refetch } = usegetProductsQuery();
+    const { data: products = [], error, isLoading, refetch } = useGetProductsQuery();
     
     const loadMoreProducts = () => {
         setVisibleProducts(prevCount => prevCount + 4)
     }
     return (
-        <section className='section__container product__container'>
+        <section className='section__container product__container '>
             <h2 className='section__header'>Trending Products</h2>
             <p className='section__subheader mb-12'>
-                Discover the Hottest Picks: Elevate Your Style with Our Curated Collection of Trending Women's Fashion Products.
+                Discover the Hottest Picks: Elevate Your Style with Our Curated Collection of Trending Kid's Fashion Products.
             </p>
 
             {/* products card */}
-            <div className='mt-12'>
+            <div className='mt-12 mx-20'>
             <ProductCards products={products.slice(0, visibleProducts)}/>
             </div>
 

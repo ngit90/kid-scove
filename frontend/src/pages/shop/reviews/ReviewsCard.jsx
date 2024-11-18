@@ -20,7 +20,7 @@ const ReviewsCard = ({ productReviews }) => {
     }
 
     return (
-        <div className='my-6  bg-white p-8'>
+        <div className='my-6  rvwcard p-8'>
             <div>
                 {
                     reviews.length > 0 ? (<div>

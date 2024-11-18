@@ -72,7 +72,7 @@ const AdminStatsChart = ({ stats }) => {
                 </div>
             </div>
             <div>
-                <p className='text-center'>Made with Mamun</p>
+                <p className='text-center'>Made with Kid's Cove</p>
             </div>
         </div>
     )

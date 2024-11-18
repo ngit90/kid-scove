@@ -32,7 +32,7 @@ const ShopPage = () => {
 
     const { data: { products = [], totalPages, totalProducts } = {}, error, isLoading } = useFetchAllProductsQuery({
         category: category !== 'all' ? category : '',
-        cagegroup: agegroup !== 'all' ? agegroup : '',
+        agegroup: agegroup !== 'all' ? agegroup : '',
         minPrice: isNaN(minPrice) ? '' : minPrice,
         maxPrice: isNaN(maxPrice) ? '' : maxPrice,
         page: currentPage,
@@ -65,7 +65,7 @@ const ShopPage = () => {
         <>
             <section className='section__container bg-primary-light'>
                 <h2 className='section__header capitalize'>Shop Page</h2>
-                <p className='section__subheader'>Discover the Hottest Picks: Elevate Your Style with Our Curated Collection of Trending Women's Fashion Products.</p>
+                <p className='section__subheader'>Discover the Hottest Picks: Elevate Your Style with Our Curated Collection of Trending Kid's Fashion Products.</p>
             </section>
 
             <section className='section__container'>

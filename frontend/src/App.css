@@ -24,10 +24,14 @@
 body{
   background-color: rgb(203, 222, 178);
 }
+.rvwcard{
+  background-color: var(--primary-color-light);;
+}
 .section__container {
   max-width: var(--max-width-1400);
   margin: auto;
-  padding: 5rem 1rem;
+  background-color: var(--primary-color-semilight);
+  padding: 2rem 1rem;
 }
 
 .section__header {
@@ -172,7 +176,7 @@ nav {
 .header__image {
   position: relative;
   height: 100%;
-  margin-bottom: 6rem;
+  margin-bottom: 14rem;
   margin-right: 4rem;
 }
 
@@ -301,8 +305,10 @@ nav {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+  margin-top: 5rem;
   margin-inline: 2rem;
   align-items: center;
+  min-height: 25rem;
 }
 
 .deals__image {
@@ -313,7 +319,7 @@ nav {
 .deals__image img {
   position: absolute;
   left: 50%;
-  bottom: -3rem;
+  bottom: -1.5rem;
   transform: translateX(-50%);
   max-width: 550px;
   border-radius: 50%;

@@ -24,7 +24,7 @@ const SingleProduct = () => {
 
     return (
         <>
-            <section className='section__container bg-primary-light'>
+            <section className='section__container'>
                 <h2 className='section__header capitalize'>Single Product Page</h2>
                 <div className='section__subheader space-x-2'>
                     <span className='hover:text-primary'><Link to="/">home</Link></span>
@@ -40,15 +40,15 @@ const SingleProduct = () => {
                     {/* product image */}
                     <div className='md:w-1/2 w-full'>
                         <img src={singleProduct?.image} alt="" 
-                        className='rounded-md w-full h-auto'
+                        className='rounded-md w-80 h-80 ml-60'
                         />
                     </div>
 
                     <div className='md:w-1/2 w-full'>
                         <h3 className='text-2xl font-semibold mb-4'>{singleProduct?.name}</h3>
                         <p className='text-xl text-primary mb-4 space-x-1'>
-                            ${singleProduct?.price} 
-                             {singleProduct?.oldPrice && <s className='ml-1'>${singleProduct?.oldPrice}</s>}
+                            Rs.{singleProduct?.price} /-
+                             {singleProduct?.oldPrice && <s className='ml-1'>Rs.{singleProduct?.oldPrice} /-</s>}
                             </p>
                         <p className='text-gray-400 mb-4'>{singleProduct?.description}</p>
 
