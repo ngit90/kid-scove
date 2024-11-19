@@ -10,8 +10,13 @@ router.post("/register", async (req, res) => {
      // Validate input data
      const { error } = User.validateUser({ username, email, password });
      if (error) {
-     console.error('Validation Error:', error.details[0].message);
+      console.error('Validation Error:', error.details[0].message);
+			return res.status(400).send({ message: error.details[0].message });
      } else {
+      const userdata = await User.findOne({ email: req.body.email });
+      if (userdata)
+        return res.status(409).send({ message: "User with given email already Exist!" });
+
     const user = new User({ email, username, password });
     await user.save();
     res.status(201).send({ message: "User registered successfully!" });

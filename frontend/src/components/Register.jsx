@@ -7,6 +7,7 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState('');
 
     const [registerUser, {isLoading}] = useRegisterUserMutation();
     const navigate = useNavigate()
@@ -23,10 +24,12 @@ const Register = () => {
             alert("Registration successful!")
             navigate('/login')
         } catch (error) {
-            setMessage("Registration failed")
-        }
+            console.log(error.data.message);
+                setErrors(error.data.message);
+                setMessage("Registration failed");
+            }
+		}
 
-    }
     return (
         <section className='h-screen flex items-center justify-center'>
             <div className='max-w-sm border shadow bg-white mx-auto p-8'>
@@ -49,6 +52,9 @@ const Register = () => {
                     />
                     {
                         message && <p className='text-red-500'>{message}</p>
+                    }
+                    {
+                         errors && <p className='text-red-500'>{errors}</p>
                     }
 
                     <button type='submit'
