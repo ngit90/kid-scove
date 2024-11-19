@@ -1,32 +1,101 @@
 const express = require("express");
 const User = require("./user.model");
+const OTP = require("./otp.model");
+require('dotenv').config();
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const generateToken = require("../middleware/generateToken");
 const router = express.Router();
 
-// Register endpoint
-router.post("/register", async (req, res) => {
+// Send OTP
+router.post("/send-otp", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-     // Validate input data
-     const { error } = User.validateUser({ username, email, password });
-     if (error) {
-      console.error('Validation Error:', error.details[0].message);
-			return res.status(400).send({ message: error.details[0].message });
-     } else {
-      const userdata = await User.findOne({ email: req.body.email });
-      if (userdata)
-        return res.status(409).send({ message: "User with given email already Exist!" });
+    const { email } = req.body;
+    console.log("Request received for email:", email);
 
-    const user = new User({ email, username, password });
-    await user.save();
-    res.status(201).send({ message: "User registered successfully!" });
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      console.log("User already exists:", email);
+      return res.status(409).send({ message: "User with given email already exists!" });
     }
+
+    // Generate a 6-digit OTP
+    const otpCode = crypto.randomInt(100000, 999999).toString();
+    console.log("Generated OTP:", otpCode);
+
+    // Save OTP in the database
+    const otp = new OTP({
+      email,
+      code: otpCode,
+      expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
+    });
+    await otp.save();
+    console.log("OTP saved to database for email:", email);
+    console.log(otp.expiresAt);
+
+    // Configure Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    // Send email
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Your OTP Code",
+      text: `Your OTP code is ${otpCode}. It will expire in 5 minutes.`,
+    };
+    await transporter.sendMail(mailOptions);
+    console.log("OTP email sent successfully to:", email);
+
+    res.status(200).send({ message: "OTP sent successfully!" });
   } catch (error) {
-    console.error("Error registering user", error);
-    res.status(500).send({ message: "Error registering user" });
+    console.error("Error in send-otp:", error);
+    res.status(500).send({ message: "Error sending OTP" });
   }
 });
+// Verify OTP and Register
+router.post("/verify-otp", async (req, res) => {
+  try {
+    const { email, otp, username, password } = req.body;
 
+    // Find the OTP in the database
+    const otpEntry = await OTP.findOne({ email, code: otp });
+    console.log(otp);
+    console.log(otpEntry);
+    if (!otpEntry) {
+      return res.status(400).send({ message: "Invalid or expired OTP" });
+    }
+  
+    // Check if OTP has expired
+    if (otpEntry.expiresAt < Date.now()) {
+      await OTP.deleteOne({ email, code: otp });
+      return res.status(400).send({ message: "OTP has expired" });
+    }
+
+    // Delete the OTP entry after successful verification
+    await OTP.deleteOne({ email, code: otp });
+
+    // Proceed with registration
+    const { error } = User.validateUser({ username, email, password });
+    if (error) {
+      return res.status(400).send({ message: error.details[0].message });
+    }
+
+    const user = new User({ username, email, password });
+    await user.save();
+
+    res.status(201).send({ message: "User registered successfully!" });
+  } catch (error) {
+    console.error("Error verifying OTP or registering user:", error);
+    res.status(500).send({ message: "Error verifying OTP or registering user" });
+  }
+});
 // login user endpoint
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
