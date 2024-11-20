@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
-import { getBaseUrl } from "../utils/baseURL";
 import { Link, useNavigate } from 'react-router-dom';
+import { useSendOtpMutation,useVerifyOtpMutation  } from '../redux/features/auth/authApi';
 
 const Register = () => {
     const [message, setMessage] = useState('');
@@ -13,48 +12,65 @@ const Register = () => {
     const [otp, setOtp] = useState('');
     const [resendCooldown, setResendCooldown] = useState(false);
     const [timer, setTimer] = useState(0);
+
+    const [sendOtp, {isLoading: loginLoading}] = useSendOtpMutation()
+    const [verifyOtp, {isLoading: loginLoad}] = useVerifyOtpMutation()
     const navigate = useNavigate();
 
     // Step 1: Send OTP
     const handleSendOtp = async (e) => {
         e.preventDefault();
+        const data = {
+            email,
+            username,
+            password
+        }
         try {
-            await axios.post(`${getBaseUrl()}/api/auth/send-otp`, { email });
+            setErrors('');
+            const response =  await sendOtp(data).unwrap();
             setMessage('OTP sent to your email!');
             setStep(2); // Move to OTP verification step
         } catch (error) {
             console.log(error);
-            setErrors(error.response?.data?.message || 'Failed to send OTP');
+            setErrors(error.data.message || 'Failed to send OTP');
         }
     };
 
     // Step 2: Verify OTP and Complete Registration
     const handleVerifyOtp = async (e) => {
         e.preventDefault();
+        const userdata = {
+            email,
+            username,
+            password,
+            otp
+        }
         try {
-            const response = await axios.post(`${getBaseUrl()}/api/auth/verify-otp`, { email, otp, username, password });
-            if (response.status === 201) {
+            const response =  await verifyOtp(userdata).unwrap();
+            console.log(response);
                 alert('Registration successful!');
                 navigate('/login');
-            } else {
-                setErrors('Invalid OTP. Please try again.');
-            }
         } catch (error) {
-            setErrors(error.response.data.message);
+            setErrors('Invalid OTP. Please try again.');
         }
     };
 
     // Handle Resend OTP
     const handleResendOtp = async () => {
         if (resendCooldown) return; // Prevent resending if cooldown is active
+        const data = {
+            email,
+            username,
+            password
+        }
         try {
-            await axios.post(`${getBaseUrl()}/api/auth/send-otp`, { email });
+            const response =  await sendOtp(data).unwrap();
             setMessage('OTP sent to your email!');
             setOtp('');
             setResendCooldown(true); // Start cooldown
             setTimer(10); // Set cooldown time (e.g., 10 seconds)
         } catch (error) {
-            setErrors(error.response?.data?.message || 'Failed to resend OTP');
+            setErrors(error.data.message || 'Failed to resend OTP');
         }
     };
 

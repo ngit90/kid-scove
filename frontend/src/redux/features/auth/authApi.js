@@ -9,9 +9,16 @@ const authApi = createApi({
   }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    registerUser: builder.mutation({
+    sendOtp:builder.mutation({
+      query: (useremail) => ({
+        url: "/send-otp",
+        method: "POST",
+        body: useremail,
+      }),
+    }),
+    verifyOtp: builder.mutation({
       query: (newUser) => ({
-        url: "/register",
+        url: "/verify-otp",
         method: "POST",
         body: newUser,
       }),
@@ -64,5 +71,5 @@ const authApi = createApi({
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation, useLogoutUserMutation, useGetUserQuery, useDeleteUserMutation, useUpdateUerRoleMutation, useEditProfileMutation } = authApi;
+export const { useVerifyOtpMutation, useSendOtpMutation, useLoginUserMutation, useLogoutUserMutation, useGetUserQuery, useDeleteUserMutation, useUpdateUerRoleMutation, useEditProfileMutation } = authApi;
 export default authApi;

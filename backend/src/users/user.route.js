@@ -10,7 +10,7 @@ const router = express.Router();
 // Send OTP
 router.post("/send-otp", async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, username, password } = req.body;
     console.log("Request received for email:", email);
 
     // Check if the user already exists
@@ -19,7 +19,11 @@ router.post("/send-otp", async (req, res) => {
       console.log("User already exists:", email);
       return res.status(409).send({ message: "User with given email already exists!" });
     }
-
+    // Proceed with registration
+    const { error } = User.validateUser({ username, email, password });
+    if (error) {
+      return res.status(400).send({ message: error.details[0].message });
+    }
     // Generate a 6-digit OTP
     const otpCode = crypto.randomInt(100000, 999999).toString();
     console.log("Generated OTP:", otpCode);
