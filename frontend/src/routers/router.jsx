@@ -7,6 +7,7 @@ import ShopPage from "../pages/shop/ShopPage";
 import SingleProduct from "../pages/shop/productDetails/SingleProduct";
 import Login from "../components/Login";
 import Register from "../components/Register";
+import ForgotPass from "../components/ForgotPass";
 import PaymentSuccess from "../components/PaymentSuccess";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <Register />
+    },
+    {
+        path: "/forgotpass",
+        element: <ForgotPass />
     },
     // dashboard routes start here
     {

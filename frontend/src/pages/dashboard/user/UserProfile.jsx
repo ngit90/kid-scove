@@ -13,8 +13,8 @@ const UserProfile = () => {
     const [formData, setformData] = useState({
         username: '',
         profileImage: '',
-        bio: '',
-        profession: '',
+        place: '',
+        phone: '',
         userId: ''
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,8 +24,8 @@ const UserProfile = () => {
            setformData({
             username: user?.username || '',
             profileImage: user?.profileImage || '',
-            bio: user?.bio || '',
-            profession: user?.profession || '',
+            place: user?.place || '',
+            phone: user?.phone || '',
             userId: user?._id || ''
            })
         }
@@ -43,16 +43,17 @@ const UserProfile = () => {
         const updatedUser = {
             username: formData.username,
             profileImage: formData.profileImage,
-            bio: formData.bio,
-            profession: formData.profession,
+            place: formData.place,
+            phone: formData.phone,
             userId: formData.userId
         }
         try {
             const response = await editProfile(updatedUser).unwrap();
-            console.log(response)
+            console.log(response.user)
             dispatch(setUser(response.user));
-            localStorage.setItem('user', JSON.stringify(response.user))
+            //localStorage.setItem('user', JSON.stringify(response.user))
             alert('Profile updated successfully!');
+
         } catch (error) {
           console.error("Failed to update profile", error)  ;
           alert("Failed to update profile. Please try again")
@@ -67,9 +68,9 @@ const UserProfile = () => {
                 <div className='flex items-center mb-4'>
                     <img src={formData?.profileImage || avatarImg} alt="" className='w-32 h-32 object-cover rounded-full' />
                     <div className='ml-6'>
-                        <h3 className='text-2xl font-semibold'>Username: {formData?.username || 'N/A'}</h3>
-                        <p className='text-gray-700'>User Bio: {formData.bio || 'N/A'}</p>
-                        <p className='text-gray-700'>Profession: {formData.profession || 'N/A'}</p>
+                        <h3 className='text-2xl font-semibold'>Name: {formData?.username || 'N/A'}</h3>
+                        <p className='text-gray-700'>Place: {formData?.place || 'N/A'}</p>
+                        <p className='text-gray-700'>Phone: {formData?.phone || 'N/A'}</p>
                     </div>
                     <button
                         onClick={() => setIsModalOpen(true)}
@@ -111,20 +112,19 @@ const UserProfile = () => {
                                     />
                                 </div>
                                 <div className='mb-4'>
-                                    <label htmlFor="bio" className='block text-sm font-medium text-gray-700 '>Write Your Bio</label>
-                                    <textarea name="bio"
-                                        row="3"
-                                        className='mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm'
-                                        value={formData?.bio}
+                                    <label htmlFor="place" className='block text-sm font-medium text-gray-700 '>Place</label>
+                                    <input type="text" name='place' value={formData?.place}
                                         onChange={handleChange}
-                                        placeholder='add your bio'
-                                    ></textarea>
+                                        placeholder='Place'
+                                        className='mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm'
+                                        required
+                                    />
                                 </div>
                                 <div className='mb-4'>
-                                    <label htmlFor="profession" className='block text-sm font-medium text-gray-700 '>Profession</label>
-                                    <input type="text" name='profession' value={formData?.profession}
+                                    <label htmlFor="phone" className='block text-sm font-medium text-gray-700 '>Phone</label>
+                                    <input type="text" name='phone' value={formData?.phone}
                                         onChange={handleChange}
-                                        placeholder='profession'
+                                        placeholder='phone'
                                         className='mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm'
                                         required
                                     />

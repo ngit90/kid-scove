@@ -1,25 +1,26 @@
 import React, { useState } from 'react'
-import { useUpdateUerRoleMutation } from '../../../../redux/features/auth/authApi';
+import { useUpdateUserMutation } from '../../../../redux/features/auth/authApi';
 
 const UpdateUserModal = ({ user, onClose, onRoleUpdate }) => {
     const [role, setRole] = useState(user.role);
+    const [status, setStatus] = useState(user.status);
 
-    const [updateUerRole] = useUpdateUerRoleMutation()
+    const [updateUser] = useUpdateUserMutation()
     const handleUpdateRole = async () => {
         try {
-            await updateUerRole({ userId: user?._id, role }).unwrap();
-            alert('Updated role successfully!')
+            await updateUser({ userId: user?._id, role, status }).unwrap();
+            alert('Updated successfully!')
             onRoleUpdate();
             onClose();
         } catch (error) {
-            console.error("Failed to update user role", error);
+            console.error("Failed to update user", error);
         }
     }
 
     return (
         <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-80'>
             <div className='bg-white p-4 rounded shadow-lg w-1/3'>
-                <h2 className='text-xl mb-4'>Edit User Role</h2>
+                <h2 className='text-xl mb-4'>Edit User</h2>
                 <div className='mb-4 space-y-4'>
                     <label className='block text-sm font-medium text-gray-700'>Email</label>
                     <input type="email"
@@ -37,6 +38,17 @@ const UpdateUserModal = ({ user, onClose, onRoleUpdate }) => {
                     >
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div className='mb-4 space-y-4'>
+                    <label className='block text-sm font-medium text-gray-700'>Status</label>
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        className='block w-full shadow-sm sm:text-sm bg-gray-100 border-gray-300 rounded-md py-2.5 px-5 focus:outline-none'
+                    >
+                        <option value="active">Active</option>
+                        <option value="block">Block</option>
                     </select>
                 </div>
 

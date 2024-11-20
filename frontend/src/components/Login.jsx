@@ -30,7 +30,12 @@ const Login = () => {
         alert("Login successful");
         navigate("/")
        } catch (error) {
-        setMessage("Please provide a valid email and password")
+        if(error.status === 406){
+            setMessage("Account Blocked. Contact Cust.Care number.")
+        }
+        else{
+            setMessage("Please provide a valid email and password")
+        }
        }
 
     }
@@ -52,7 +57,7 @@ const Login = () => {
                     {
                         message && <p className='text-red-500'>{message}</p>
                     }
-
+                    <Link to="/forgotpass" className='text-red-400 px-1 underline ml-40'>Forgot Password ?</Link>
                     <button type='submit'
                         className='w-full mt-5 bg-primary text-white hover:bg-indigo-500 font-medium py-3 rounded-md'
                     >Login</button>

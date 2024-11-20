@@ -23,6 +23,20 @@ const authApi = createApi({
         body: newUser,
       }),
     }),
+    sendPassOtp:builder.mutation({
+      query: (useremail) => ({
+        url: "/sendpass-otp",
+        method: "POST",
+        body: useremail,
+      }),
+    }),
+    forgotPass: builder.mutation({
+      query: (newUser) => ({
+        url: "/forgotpass",
+        method: "POST",
+        body: newUser,
+      }),
+    }),
     loginUser: builder.mutation({
       query: (credentials) => ({
         url: "/login",
@@ -51,11 +65,11 @@ const authApi = createApi({
         }),
         invalidatesTags: ["User"],
     }),
-    updateUerRole: builder.mutation({
-        query: ({userId, role}) => ({
+    updateUser: builder.mutation({
+        query: ({userId, role, status}) => ({
             url: `/users/${userId}`,
             method: "PUT",
-            body: {role}
+            body: {role, status}
           }),
           refetchOnMount: true,
           invalidatesTags: ["User"],
@@ -71,5 +85,5 @@ const authApi = createApi({
   }),
 });
 
-export const { useVerifyOtpMutation, useSendOtpMutation, useLoginUserMutation, useLogoutUserMutation, useGetUserQuery, useDeleteUserMutation, useUpdateUerRoleMutation, useEditProfileMutation } = authApi;
+export const { useVerifyOtpMutation, useSendOtpMutation, useSendPassOtpMutation, useForgotPassMutation, useLoginUserMutation, useLogoutUserMutation, useGetUserQuery, useDeleteUserMutation, useUpdateUserMutation, useEditProfileMutation } = authApi;
 export default authApi;

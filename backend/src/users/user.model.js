@@ -10,9 +10,12 @@ const userSchema = new Schema({
     role: {
         type: String, default: 'user'
     },
+    status: {
+        type: String, default: 'active'
+    },
     profileImage: String,
-    bio: {type: String, maxlength: 200},
-    profession: String,
+    place: String,
+    phone: String,
     createdAt: {
         type: Date,
         default: Date.now
@@ -21,12 +24,13 @@ const userSchema = new Schema({
 
 // Joi schema for validation
 const joiUserSchema = Joi.object({
-    username: Joi.string().min(3).max(30).required(),
+    username: Joi.string().min(3).max(30),
     email: Joi.string().email().required(),
     password: PasswordComplexity().required(),
     role: Joi.string().valid('user', 'admin'),
-    bio: Joi.string().max(200),
-    profession: Joi.string().optional(),
+    status: Joi.string().valid('active', 'block'),
+    place: Joi.string().optional(),
+    phone: Joi.string().optional(),
 });
 
 // Validate function
