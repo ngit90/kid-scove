@@ -50,7 +50,7 @@ const UserProfile = () => {
         try {
             const response = await editProfile(updatedUser).unwrap();
             console.log(response.user)
-            dispatch(setUser(response.user));
+            dispatch(setUser(response));
             //localStorage.setItem('user', JSON.stringify(response.user))
             alert('Profile updated successfully!');
 

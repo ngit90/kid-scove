@@ -35,7 +35,7 @@ const AddProduct = () => {
         price: '',
         description: ''
     });
-    const [image, setImage] = useState('');
+    const [images, setImages] = useState([]);
 
     const [AddProduct, {isLoading, error}] = useAddProductMutation()
   
@@ -50,24 +50,28 @@ const AddProduct = () => {
 
     };
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const handleImagesChange = (newImages) => {
+        setImages(newImages); // Update the images state with an array of uploaded images
+      };
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        if(!product.name || !product.category || !product.price || !product.description || !product.agegroup) {
+        if(!product.name || !product.category || !product.price || !product.description || !product.agegroup || images.length === 0) {
             alert('Please fill all the required fields');
             return;
         }
 
         try {
-            await AddProduct({...product, image, author: user?._id}).unwrap();
+            await AddProduct({...product, images, author: user?._id}).unwrap();
             alert('Product added successfully');
             setProduct({ name: '',
                 category: '',
                 agegroup: '',
                 price: '',
                 description: ''})
-                setImage('');
+                setImages([]);
                 navigate("/shop")
         } catch (error) {
             console.log("Failed to submit product", error);
@@ -109,11 +113,11 @@ const AddProduct = () => {
                 />
    
                 <UploadImage
-                name="image"
-                id="image"
-                value={e => setImage(e.target.value)}
-                placeholder='Image'
-                setImage={setImage}
+                name="images"
+                id="images"
+                value={images}
+                placeholder='Images'
+                setImages={handleImagesChange}
                 />
                 <div>
                 <label htmlFor="description" className='block text-sm font-medium text-gray-700'>Description</label>

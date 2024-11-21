@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import { useLoginUserMutation } from '../redux/features/auth/authApi';
 import { setUser } from '../redux/features/auth/authSlice';
+import { FaAngleDoubleLeft } from "react-icons/fa";
 
 const Login = () => {
     const [message, setMessage] = useState('');
@@ -42,6 +43,7 @@ const Login = () => {
     return (
         <section className='h-screen flex items-center justify-center'>
             <div className='max-w-sm border shadow bg-white mx-auto p-8'>
+                <Link to="/" className='text-red-500 px-1 underline'><FaAngleDoubleLeft />Back to HomePage </Link>
                 <h2 className='text-2xl font-semibold pt-5'>Please Login</h2>
                 <form onSubmit={handleLogin} className='space-y-5 max-w-sm mx-auto pt-8'>
                     <input type="email" name="email" id="email"
