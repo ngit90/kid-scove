@@ -44,7 +44,6 @@ const UpdateProduct = () => {
     const {data: productData, isLoading: isProductLoading, error: fetchError, refetch} = useFetchProductByIdQuery(id);
 
     const [newImages, setNewImages] = useState([])
-
     const {name, category, agegroup, description, images, price } = productData?.product || {};
 
     const [updateProduct, {isLoading:isUpdating, error: updateError}] = useUpdateProductMutation();
@@ -76,18 +75,27 @@ const UpdateProduct = () => {
     const deleteImage = async (url) => {
         try {
           // Delete image from the database
-          await axios.post(`${getBaseUrl()}/api/products/deleteImage`, { url });
-    
-          // Remove the deleted image from the state
-          const updatedImages = images.filter((image) => image !== url);
-          setNewImages(updatedImages);
+          //console.log('product is',id);
+          const response = await axios.post(`${getBaseUrl()}/api/products/deleteImage`, { id, url });
+          alert(response.data.message);
+          await refetch();
+          setProduct({
+            name: name || '',
+            category: category || '',
+            agegroup: agegroup || '',
+            price: price || '',
+            description: description || '',
+            images: response.data.updatedProduct.images || []
+        })
+        await refetch();
         } catch (error) {
-          console.error('Error deleting image:', error);
+          console.error('Failed to delete image URL:', error);
           alert('Failed to delete image');
         }
     }
     const handleImageChange= (imgs) => {
         setNewImages(imgs);
+        //console.log('handleimagechange',images);
     }
 
     const handleSubmit =  async (e) => {
@@ -95,7 +103,7 @@ const UpdateProduct = () => {
 
         const updatedProduct = {
             ...product,
-            images: newImages ? newImages : product.images, 
+            images: images.concat(newImages), 
             author: user?._id
         };
 
@@ -115,7 +123,7 @@ const UpdateProduct = () => {
   return (
     <div className='container mx-auto mt-8'>
         <h2 className='text-2xl font-bold mb-6'>Update Product </h2>
-        <form onSubmit={handleSubmit} className='space-y-4'>
+        <form  className='space-y-4'>
                 <TextInput
                 label="Product Name"
                 name="name"
@@ -148,7 +156,7 @@ const UpdateProduct = () => {
                  <UploadImage
                 name="images"
                 id="images"
-                value={newImages || product.images}
+                value={newImages}
                 placeholder='Images'
                 setImages={handleImageChange}
                 />
@@ -171,7 +179,7 @@ const UpdateProduct = () => {
                 </div>
 
                 <div>
-                    <button
+                    <button onClick={handleSubmit}
                     className='add-product-btn'
                    
                     >{isUpdating ? 'Updating...' : 'Update Product'}</button>

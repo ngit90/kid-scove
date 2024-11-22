@@ -194,6 +194,29 @@ router.get("/related/:id", async (req, res) => {
   }
 });
 
+router.post('/deleteImage', async (req, res) => {
+  const { id, url } = req.body;
+  //console.log(id, url);
+  try {
+    // Find the product and update the `images` array by removing the URL
+    const updatedProduct = await Products.findByIdAndUpdate(
+      id,
+      { $pull: { images: url } }, // Remove the specific URL from the images array
+      { new: true } // Return the updated product document
+    );
+    //console.log('updated is', updatedProduct);
+    if (!updatedProduct) {
+      return res.status(404).send({ error: 'Product not found' });
+    }
 
+    res.status(200).send({
+      message: 'Image URL removed successfully',
+      updatedProduct,
+    });
+  } catch (error) {
+    console.error('Error removing image URL:', error);
+    res.status(500).send({ error: 'Failed to remove image URL' });
+  }
+});
 
 module.exports = router;
