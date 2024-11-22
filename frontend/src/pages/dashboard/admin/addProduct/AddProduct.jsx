@@ -9,10 +9,10 @@ import { useNavigate } from 'react-router-dom';
 const categories = [
     { label: 'Select Category', value: '' },
     { label: 'Accessories', value: 'accessories' },
-    { label: 'Dress-Boys', value: 'dress-boys' },
-    { label: 'Dress-Girls', value: 'dress-girls' },
-    { label: 'Footwear-Boys', value: 'footwear-boys' },
-    { label: 'Footwear-Girls', value: 'footwear-girls' },
+    { label: 'Dress-Boys', value: 'dressboys' },
+    { label: 'Dress-Girls', value: 'dressgirls' },
+    { label: 'Footwear-Boys', value: 'footwearboys' },
+    { label: 'Footwear-Girls', value: 'footweargirls' },
     { label: 'Toys', value: 'toys' }
 ];
 
@@ -64,6 +64,7 @@ const AddProduct = () => {
         }
 
         try {
+            console.log('images are',images);
             await AddProduct({...product, images, author: user?._id}).unwrap();
             alert('Product added successfully');
             setProduct({ name: '',

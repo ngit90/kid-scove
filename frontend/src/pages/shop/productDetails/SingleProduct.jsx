@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link, useParams } from 'react-router-dom'
 import RatingStars from '../../../components/RatingStars';
 import {useDispatch} from "react-redux"
@@ -14,10 +14,20 @@ const SingleProduct = () => {
    
     const singleProduct = data?.product || {};
     const productReviews = data?.reviews || [];
+    const [selectedImage, setSelectedImage] = useState(null);   
 
+    // Update selectedImage when singleProduct changes
+    useEffect(() => {
+        if (singleProduct?.images && singleProduct.images.length > 0) {
+            setSelectedImage(singleProduct.images[0]); // Set to the first image
+        }
+    }, [singleProduct]);
     const handleAddToCart = (product) => {
         dispatch(addToCart(product))
     }
+    const handleThumbnailClick = (image) => {
+        setSelectedImage(image);
+      };
 
     if(isLoading) return <p>Loading...</p>
     if(error) return <p>Error loading product details.</p>
@@ -36,15 +46,28 @@ const SingleProduct = () => {
             </section>
 
             <section className='section__container mt-8'>
-                <div className='flex flex-col items-center md:flex-row gap-8'>
+                <div className='flex flex-col items-center md:flex-row md:ml-35 ml-10'>
                     {/* product image */}
-                    <div className='md:w-1/2 w-full'>
-                        <img src={singleProduct?.image} alt="" 
-                        className='rounded-md w-80 h-80 ml-60'
+                    <div className="md:w-1/4 w-full md:grid flex md:grid-wrap gap-3 md:ml-20 ">
+                        {singleProduct?.images.map((image, index) => (
+                        <img 
+                            key={index} 
+                            src={image} 
+                            alt={`Product ${index + 1}`} 
+                            className={`rounded-md w-20 h-20 object-cover cursor-pointer border border-gray-300 ${
+                                selectedImage === image ? 'border-blue-800' : 'hover:border-blue-800'
+                              }`}
+                            onClick={() => handleThumbnailClick(image)}
+                        />
+                        ))}
+                    </div>
+                    <div className='md:w-1/2 w-full mt-2 ml-2'>
+                        <img src={selectedImage} alt="" 
+                        className='rounded-md w-80 h-80'
                         />
                     </div>
 
-                    <div className='md:w-1/2 w-full'>
+                    <div className='md:w-1/2 w-1/2 mr-40'>
                         <h3 className='text-2xl font-semibold mb-4'>{singleProduct?.name}</h3>
                         <p className='text-xl text-primary mb-4 space-x-1'>
                             Rs.{singleProduct?.price} /-

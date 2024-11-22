@@ -1,18 +1,24 @@
 import React, { useState } from 'react'
-
+import { useSelector } from 'react-redux'
 import commentorIcon from "../../../assets/avatar.png"
 import { formatDate } from '../../../utils/formateDate'
 import RatingStars from '../../../components/RatingStars'
 import PostAReview from './PostAReview'
+import { useNavigate } from 'react-router-dom';
 
 const ReviewsCard = ({ productReviews }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-
+    const {user} = useSelector((state) => state.auth);
     const reviews = productReviews || []
-
+    const navigate = useNavigate()
 
     const handleOpenReviewModal = () => {
-        setIsModalOpen(true)
+        if(user) {
+            setIsModalOpen(true)
+        }
+        else{
+            navigate('/login');
+        }
     }
 
     const handleCloseReviewModal = () => {

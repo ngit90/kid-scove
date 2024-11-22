@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios';
+import { getBaseUrl } from "../../../../utils/baseURL";
 import { useFetchProductByIdQuery, useUpdateProductMutation } from '../../../../redux/features/products/productsApi';
 import { useSelector } from 'react-redux';
 import TextInput from '../addProduct/TextInput';
@@ -9,14 +11,14 @@ import UploadImage from '../addProduct/UploadImage';
 const categories = [
     { label: 'Select Category', value: '' },
     { label: 'Accessories', value: 'accessories' },
-    { label: 'Dress-Boys', value: 'dress-boys' },
-    { label: 'Dress-Girls', value: 'dress-girls' },
-    { label: 'Footwear-Boys', value: 'footwear-boys' },
-    { label: 'Footwear-Girls', value: 'footwear-girls' },
+    { label: 'Dress-Boys', value: 'dressboys' },
+    { label: 'Dress-Girls', value: 'dressgirls' },
+    { label: 'Footwear-Boys', value: 'footwearboys' },
+    { label: 'Footwear-Girls', value: 'footweargirls' },
     { label: 'Toys', value: 'toys' }
 ];
 
-const agegroup = [
+const agegroups = [
     { label: 'Select Agegroup', value: '' },
     { label: 'Newborn', value: 'Newborn' },
     { label: '3to12_Months', value: '3to12_Months' },
@@ -36,14 +38,14 @@ const UpdateProduct = () => {
         agegroup: '',
         price: '',
         description: '',
-        image: ''
+        images: []
     })
 
     const {data: productData, isLoading: isProductLoading, error: fetchError, refetch} = useFetchProductByIdQuery(id);
 
-    const [newImage, setNewImage] = useState(null)
+    const [newImages, setNewImages] = useState([])
 
-    const {name, category, agegroup, description, image: imageURL, price } = productData?.product || {};
+    const {name, category, agegroup, description, images, price } = productData?.product || {};
 
     const [updateProduct, {isLoading:isUpdating, error: updateError}] = useUpdateProductMutation();
 
@@ -55,7 +57,7 @@ const UpdateProduct = () => {
                 agegroup: agegroup || '',
                 price: price || '',
                 description: description || '',
-                image: imageURL || ''
+                images: images || []
             })
         }
     }, [productData])
@@ -71,8 +73,21 @@ const UpdateProduct = () => {
 
     };
 
-    const handleImageChange= (image) => {
-        setNewImage(image);
+    const deleteImage = async (url) => {
+        try {
+          // Delete image from the database
+          await axios.post(`${getBaseUrl()}/api/products/deleteImage`, { url });
+    
+          // Remove the deleted image from the state
+          const updatedImages = images.filter((image) => image !== url);
+          setNewImages(updatedImages);
+        } catch (error) {
+          console.error('Error deleting image:', error);
+          alert('Failed to delete image');
+        }
+    }
+    const handleImageChange= (imgs) => {
+        setNewImages(imgs);
     }
 
     const handleSubmit =  async (e) => {
@@ -80,7 +95,7 @@ const UpdateProduct = () => {
 
         const updatedProduct = {
             ...product,
-            image: newImage ? newImage : product.image, 
+            images: newImages ? newImages : product.images, 
             author: user?._id
         };
 
@@ -120,7 +135,7 @@ const UpdateProduct = () => {
                     name="agegroup"
                     value={product.agegroup}
                     onChange={handleChange}
-                    options={agegroup}
+                    options={agegroups}
                 />
                 <TextInput
                     label="Price"
@@ -130,14 +145,21 @@ const UpdateProduct = () => {
                     value={product.price}
                     onChange={handleChange}
                 />
-
                  <UploadImage
-                name="image"
-                id="image"
-                value={newImage || product.image}
-                placeholder='Image'
-                setImage={handleImageChange}
+                name="images"
+                id="images"
+                value={newImages || product.images}
+                placeholder='Images'
+                setImages={handleImageChange}
                 />
+                <div className="mt-4 flex gap-2 flex-wrap">
+                {images.map((url, index) => (
+                <div key={index}>
+                <button onClick={() => deleteImage(url)} className='ml-14'> X </button>
+                <img  src={url} alt={`Uploaded ${index + 1}`} className="w-20 h-20 object-cover rounded" />
+                </div>
+                ))}
+                </div>
                 <div>
                 <label htmlFor="description" className='block text-sm font-medium text-gray-700'>Description</label>
                 <textarea name="description" id="description"
@@ -149,7 +171,7 @@ const UpdateProduct = () => {
                 </div>
 
                 <div>
-                    <button type='submit'
+                    <button
                     className='add-product-btn'
                    
                     >{isUpdating ? 'Updating...' : 'Update Product'}</button>

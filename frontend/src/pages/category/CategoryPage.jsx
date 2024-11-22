@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import products from "../../data/products.json"
+//import products from "../../data/products.json"
 import ProductCards from '../shop/ProductCards';
+import { useGetProductsQuery } from '../../redux/features/products/productsApi';
 
 const CategoryPage = () => {
     const {categoryName} = useParams();
    const [filteredProducts, setFilteredProducts] = useState([]);
+   const { data: products = [], error, isLoading, refetch } = useGetProductsQuery();
 
    useEffect(() =>{
     const filtered = products.filter((product) => product.category === categoryName.toLowerCase());
-
+    console.log('filters', products);
     setFilteredProducts(filtered);
    } , [categoryName])
 

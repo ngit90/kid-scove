@@ -26,18 +26,15 @@ const UploadImage = ({ name, setImages }) => {
     };
 
     // Upload a single Base64 image to the server
-    const uploadSingleImage = (base64) => {
-      axios
-          .post(`${getBaseUrl()}/uploadImage`, { image: base64 })
-          .then((res) => {
-              const imageUrl = res.data;
-              setUrl(imageUrl);
-              console.log(imageUrl);
-          })
-          .catch((error) => {
-              console.error(error);
-          });
-  };
+    const uploadSingleImage = async (base64) => {
+        try {
+            const res = await axios.post(`${getBaseUrl()}/uploadImage`, { image: base64 });
+            return res.data; // Assuming the server returns the uploaded image URL
+          } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+          }
+        };
 
   // Handle file selection and upload
   const uploadImages = async (event) => {
@@ -52,10 +49,10 @@ const UploadImage = ({ name, setImages }) => {
     try {
       for (let i = 0; i < files.length; i++) {
         const base64 = await convertBase64(files[i]);
-        //const imageUrl = await uploadSingleImage(base64); // Upload each image
-        uploadSingleImage(base64);
-        //uploadedUrls.push(imageUrl); // Store the URL
-         uploadedUrls.push(url); // Store the URL
+        const imageUrl = await uploadSingleImage(base64); // Upload each image
+        //uploadSingleImage(base64);
+        uploadedUrls.push(imageUrl); // Store the URL
+         //uploadedUrls.push(url); // Store the URL
       }
       setUrls(uploadedUrls); // Update the state with all uploaded URLs
       //console.log('images',uploadImages);

@@ -18,7 +18,7 @@ const ProductCards = ({products}) => {
                 <div key={index} className='product__card'>
                     <div className='relative'>
                         <Link to={`/shop/${product._id}`}>
-                        <img src={product.image} alt="product image" className='max-h-64 md:h-64 w-full object-cover hover:scale-105 transition-all duration-300' />
+                        <img src={product.images[0]} alt="product image" className='max-h-64 md:h-64 w-full object-cover hover:scale-105 transition-all duration-300' />
                         </Link>
 
                         <div className='hover:block absolute top-3 right-3'>

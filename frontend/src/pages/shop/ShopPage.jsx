@@ -6,7 +6,7 @@ import ShopFiltering from './ShopFiltering';
 import { useFetchAllProductsQuery } from '../../redux/features/products/productsApi';
 
 const filters = {
-    categories: ['all', 'accessories', 'dress-boys','dress-girls', 'footwear-boys','footwear-girls', 'toys'],
+    categories: ['all', 'accessories', 'dressboys','dressgirls', 'footwearboys','footweargirls', 'toys'],
     agegroup: ['all', 'Newborn', '3to12_Months', '1to2_Years', '3to5_Years', '5to10_Years'],
     priceRanges: [
         { label: 'Under 500', min: 0, max: 500 },
