@@ -83,6 +83,23 @@ const SingleProduct = () => {
                                 <strong>Rating: </strong>
                                 <RatingStars rating={singleProduct?.rating}/>
                             </div>
+                                {singleProduct?.stock >= 10 && (
+                                <p className="text-l text-primary mb-4">
+                                    Available...
+                                </p>
+                                )}
+
+                                {singleProduct?.stock >= 1 && singleProduct?.stock < 10 && (
+                                <p className="text-l text-primary mb-4">
+                                    Only {singleProduct?.stock} Left...
+                                </p>
+                                )}
+
+                                {singleProduct?.stock <= 0 && (
+                                <p className="text-l text-primary mb-4">
+                                    Out of Stock...
+                                </p>
+                                )}
                            
                         </div>
 

@@ -33,6 +33,7 @@ const AddProduct = () => {
         category: '',
         agegroup: '',
         price: '',
+        stock: '',
         description: ''
     });
     const [images, setImages] = useState([]);
@@ -58,7 +59,7 @@ const AddProduct = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        if(!product.name || !product.category || !product.price || !product.description || !product.agegroup || images.length === 0) {
+        if(!product.name || !product.category || !product.price || !product.stock || !product.description || !product.agegroup || images.length === 0) {
             alert('Please fill all the required fields');
             return;
         }
@@ -71,6 +72,7 @@ const AddProduct = () => {
                 category: '',
                 agegroup: '',
                 price: '',
+                stock: '',
                 description: ''})
                 setImages([]);
                 navigate("/shop")
@@ -108,8 +110,16 @@ const AddProduct = () => {
                     label="Price"
                     name="price"
                     type="number"
-                    placeholder="50"
+                    placeholder="100"
                     value={product.price}
+                    onChange={handleChange}
+                />
+                <TextInput
+                    label="Stock"
+                    name="stock"
+                    type="number"
+                    placeholder="10"
+                    value={product.stock}
                     onChange={handleChange}
                 />
    

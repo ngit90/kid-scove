@@ -198,11 +198,10 @@ router.post('/deleteImage', async (req, res) => {
   const { id, url } = req.body;
   //console.log(id, url);
   try {
-    // Find the product and update the `images` array by removing the URL
     const updatedProduct = await Products.findByIdAndUpdate(
       id,
-      { $pull: { images: url } }, // Remove the specific URL from the images array
-      { new: true } // Return the updated product document
+      { $pull: { images: url } }, 
+      { new: true } 
     );
     //console.log('updated is', updatedProduct);
     if (!updatedProduct) {

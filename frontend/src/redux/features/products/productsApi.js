@@ -56,6 +56,16 @@ const productsApi = createApi({
       invalidatesTags: ["Products"],
     }),
 
+    ImageDelete: builder.mutation({
+      query: (details) => ({
+        url: "/deleteImage",
+        method: "POST",
+        body: details,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Products"],
+    }),
+
     fetchRelatedProducts: builder.query({
       query: (id) => `/related/${id}`,
     }),
@@ -80,6 +90,6 @@ const productsApi = createApi({
   }),
 });
 
-export const {useFetchAllProductsQuery, useFetchProductByIdQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery, useGetProductsQuery} = productsApi;
+export const {useFetchAllProductsQuery, useFetchProductByIdQuery, useAddProductMutation,  useImageDeleteMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery, useGetProductsQuery} = productsApi;
 
 export default productsApi;

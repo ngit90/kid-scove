@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios';
-import { getBaseUrl } from "../../../../utils/baseURL";
-import { useFetchProductByIdQuery, useUpdateProductMutation } from '../../../../redux/features/products/productsApi';
+//import axios from 'axios';
+//import { getBaseUrl } from "../../../../utils/baseURL";
+import { useFetchProductByIdQuery, useUpdateProductMutation, useImageDeleteMutation } from '../../../../redux/features/products/productsApi';
 import { useSelector } from 'react-redux';
 import TextInput from '../addProduct/TextInput';
 import SelectInput from '../addProduct/SelectInput';
@@ -29,6 +29,7 @@ const agegroups = [
 
 
 const UpdateProduct = () => {
+    const [imageDelete ] = useImageDeleteMutation();
     const {id} = useParams();
     const navigate =  useNavigate();
     const {user} = useSelector((state) => state.auth)
@@ -37,6 +38,7 @@ const UpdateProduct = () => {
         category: '',
         agegroup: '',
         price: '',
+        stock:'',
         description: '',
         images: []
     })
@@ -44,7 +46,7 @@ const UpdateProduct = () => {
     const {data: productData, isLoading: isProductLoading, error: fetchError, refetch} = useFetchProductByIdQuery(id);
 
     const [newImages, setNewImages] = useState([])
-    const {name, category, agegroup, description, images, price } = productData?.product || {};
+    const {name, category, agegroup, description, images, price, stock } = productData?.product || {};
 
     const [updateProduct, {isLoading:isUpdating, error: updateError}] = useUpdateProductMutation();
 
@@ -55,6 +57,7 @@ const UpdateProduct = () => {
                 category: category || '',
                 agegroup: agegroup || '',
                 price: price || '',
+                stock: stock || '',
                 description: description || '',
                 images: images || []
             })
@@ -73,21 +76,28 @@ const UpdateProduct = () => {
     };
 
     const deleteImage = async (url) => {
-        try {
+        
           // Delete image from the database
           //console.log('product is',id);
-          const response = await axios.post(`${getBaseUrl()}/api/products/deleteImage`, { id, url });
-          alert(response.data.message);
-          await refetch();
+          const datas = {
+            id,
+            url
+          }
+          try {
+          //const response = await axios.post(`${getBaseUrl()}/api/products/deleteImage`, { id, url });
+          const response = await imageDelete(datas).unwrap();
+          //console.log(response);
+          alert(response.message);
+          //await refetch();
           setProduct({
             name: name || '',
             category: category || '',
             agegroup: agegroup || '',
             price: price || '',
+            stock: stock || '',
             description: description || '',
-            images: response.data.updatedProduct.images || []
+            images: response.updatedProduct.images || []
         })
-        await refetch();
         } catch (error) {
           console.error('Failed to delete image URL:', error);
           alert('Failed to delete image');
@@ -151,6 +161,14 @@ const UpdateProduct = () => {
                     type="number"
                     placeholder="50"
                     value={product.price}
+                    onChange={handleChange}
+                />
+                <TextInput
+                    label="Stock"
+                    name="stock"
+                    type="number"
+                    placeholder="10"
+                    value={product.stock}
                     onChange={handleChange}
                 />
                  <UploadImage
