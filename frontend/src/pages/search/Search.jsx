@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-
-//import productsData from "../../data/products.json"
 import ProductCards from '../shop/ProductCards';
 import { useGetProductsQuery } from '../../redux/features/products/productsApi';
 

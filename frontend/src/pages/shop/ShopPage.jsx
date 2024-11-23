@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react'
 
-//import productsData from "../../data/products.json"
 import ProductCards from './ProductCards';
 import ShopFiltering from './ShopFiltering';
-import { useFetchAllProductsQuery } from '../../redux/features/products/productsApi';
-
-const filters = {
-    categories: ['all', 'accessories', 'dressboys','dressgirls', 'footwearboys','footweargirls', 'toys'],
-    agegroup: ['all', 'Newborn', '3to12_Months', '1to2_Years', '3to5_Years', '5to10_Years'],
-    priceRanges: [
-        { label: 'Under 500', min: 0, max: 500 },
-        { label: '501 - 1000', min: 501, max: 1000 },
-        { label: '1001 - 2000', min: 1001, max: 2000 },
-        { label: '2001 and above', min: 2001, max: Infinity }
-    ]
-};
+import { useFetchAllProductsQuery, useGetCategoriesQuery } from '../../redux/features/products/productsApi';
 
 
 const ShopPage = () => {
+    const { data: allcategories = []} = useGetCategoriesQuery();
+    const [categories, setCategories] = useState([]);
+  
+    useEffect(() => {
+      const transformedCategories = ['all', ...allcategories.map((cat) => cat.value)];
+      setCategories(transformedCategories);
+    }, [allcategories]);
+
+
+    const filters = {
+        categories:categories,
+        agegroup: ['all', 'Newborn', '3to12_Months', '1to2_Years', '3to5_Years', '5to10_Years'],
+        priceRanges: [
+            { label: 'Under 500', min: 0, max: 500 },
+            { label: '501 - 1000', min: 501, max: 1000 },
+            { label: '1001 - 2000', min: 1001, max: 2000 },
+            { label: '2001 and above', min: 2001, max: Infinity }
+        ]
+    };
     const [filtersState, setFiltersState] = useState({
         category: 'all',
         agegroup: 'all',

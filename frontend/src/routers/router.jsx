@@ -25,7 +25,9 @@ import ManageUser from "../pages/dashboard/admin/users/ManageUser";
 import ManageOrders from "../pages/dashboard/admin/manageOrders/ManageOrders";
 import Aboutpage from "../pages/about/About";
 import Contactpage from "../pages/contact/Contact";
-
+import AddCategory from "../pages/dashboard/admin/addProduct/AddCategory";
+import ManageCategory from "../pages/dashboard/admin/manageProduct/ManageCategory";
+import UpdateCategory from "../pages/dashboard/admin/manageProduct/UpdateCategory";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -85,13 +87,27 @@ const router = createBrowserRouter([
                 element: <PrivateRoute role="admin"><AddProduct/></PrivateRoute>
             },
             {
+                path: "add-category",
+
+                element: <PrivateRoute role="admin"><AddCategory/></PrivateRoute>
+            },
+            {
                 path: "manage-products",
                 element: <PrivateRoute role="admin"><ManageProduct/></PrivateRoute>
 
             },
             {
+                path: "manage-categories",
+                element: <PrivateRoute role="admin"><ManageCategory/></PrivateRoute>
+
+            },
+            {
                 path: "update-product/:id",
                 element: <PrivateRoute role="admin"><UpdateProduct/></PrivateRoute>
+            },
+            {
+                path: "update-category/:id",
+                element: <PrivateRoute role="admin"><UpdateCategory/></PrivateRoute>
             },
             { path: "users", element: <PrivateRoute role="admin"><ManageUser/></PrivateRoute> },
             { path: "manage-orders", 

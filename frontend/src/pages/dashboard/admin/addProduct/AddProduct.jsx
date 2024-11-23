@@ -3,18 +3,9 @@ import {useSelector } from 'react-redux';
 import TextInput from './TextInput';
 import SelectInput from './SelectInput';
 import UploadImage from './UploadImage';
-import { useAddProductMutation } from '../../../../redux/features/products/productsApi';
+import { useAddProductMutation, useGetCategoriesQuery } from '../../../../redux/features/products/productsApi';
 import { useNavigate } from 'react-router-dom';
 
-const categories = [
-    { label: 'Select Category', value: '' },
-    { label: 'Accessories', value: 'accessories' },
-    { label: 'Dress-Boys', value: 'dressboys' },
-    { label: 'Dress-Girls', value: 'dressgirls' },
-    { label: 'Footwear-Boys', value: 'footwearboys' },
-    { label: 'Footwear-Girls', value: 'footweargirls' },
-    { label: 'Toys', value: 'toys' }
-];
 
 const agegroup = [
     { label: 'Select Agegroup', value: '' },
@@ -27,7 +18,8 @@ const agegroup = [
 
 const AddProduct = () => {
     const { user } = useSelector((state) => state.auth);
-
+    const { data: categories = [],  refetch } = useGetCategoriesQuery();
+    //console.log('categories', categories);
     const [product, setProduct] = useState({
         name: '',
         category: '',

@@ -1,5 +1,6 @@
 const express = require("express");
 const Products = require("./products.model");
+const Category = require("./category.model")
 const Reviews = require("../reviews/reviews.model");
 const verifyToken = require("../middleware/verifyToken");
 const verifyAdmin = require("../middleware/verifyAdmin");
@@ -38,6 +39,17 @@ router.get("/list", async (req, res) => {
   } catch (error) {
     console.error("Error fetching productss", error);
     res.status(500).send({ message: "Error fetching products" });
+  }
+});
+
+// get all categories
+router.get("/categorylist", async (req, res) => {
+  try {
+    const categories = await Category.find({});
+    res.status(200).send(categories);
+  } catch (error) {
+    console.error("Error fetching categories", error);
+    res.status(500).send({ message: "Error fetching categories" });
   }
 });
 
@@ -217,5 +229,81 @@ router.post('/deleteImage', async (req, res) => {
     res.status(500).send({ error: 'Failed to remove image URL' });
   }
 });
+
+// create a category
+router.post("/create-category", async (req, res) => {
+  try {
+    const newCategory = new Category({
+      ...req.body,
+    });
+
+    const savedCategory = await newCategory.save();
+    res.status(201).send(savedCategory);
+  } catch (error) {
+    console.error("Error creating new category", error);
+    res.status(500).send({ message: "Failed to create new category" });
+  }
+});
+
+// delete a category
+router.delete("/category/:id", async (req, res) => {
+  try {
+    const catId = req.params.id;
+    console.log('catid',catId);
+    const deletedCat = await Category.findByIdAndDelete(catId);
+    if (!deletedCat) {
+      return res.status(404).send({ message: "Category not found" });
+    }
+
+    res.status(200).send({message: "Category deleted successfully"});
+  } catch (error) {
+    console.error("Error deleting the Category", error);
+    res.status(500).send({ message: "Failed to delete the category" });
+  }
+});
+
+//   get single Category
+router.get("/category/:id", async (req, res) => {
+  try {
+    const catId = req.params.id;
+    const cat = await Category.findById(catId).populate(
+      "author",
+      "email username"
+    );
+    if (!cat) {
+      return res.status(404).send({ message: "Category not found" });
+    }
+   
+    res.status(200).send({ cat });
+  } catch (error) {
+    console.error("Error fetching the category", error);
+    res.status(500).send({ message: "Failed to fetch the category" });
+  }
+});
+
+// update a category
+router.patch("/update-category/:id", verifyToken, verifyAdmin, async (req, res) => {
+  try {
+    const catId = req.params.id;
+    const updatedCategory = await Category.findByIdAndUpdate(
+      catId,
+      { ...req.body },
+      { new: true }
+    );
+
+    if (!updatedCategory) {
+      return res.status(404).send({ message: "Category not found" });
+    }
+
+    res.status(200).send({
+      message: "Category updated successfully",
+      product: updatedCategory,
+    });
+  } catch (error) {
+    console.error("Error updating the category", error);
+    res.status(500).send({ message: "Failed to update the category" });
+  }
+});
+
 
 module.exports = router;

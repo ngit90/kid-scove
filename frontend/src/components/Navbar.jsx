@@ -31,9 +31,11 @@ const Navbar = () => {
     // admin dropdown menus
     const adminDropDownMenus = [
         {label: "Dashboard", path: "/dashboard/admin"},
-        {label: "Manage Items", path: "/dashboard/manage-products"},
+        {label: "Manage Products", path: "/dashboard/manage-products"},
         {label: "All Orders", path: "/dashboard/manage-orders"},
         {label: "Add Product", path: "/dashboard/add-product"},
+        {label: "Add Category", path: "/dashboard/add-category"},
+        {label: "Manage Categories", path: "/dashboard/manage-categories"},
     ]
 
     // user dropdown menus
@@ -94,7 +96,7 @@ const Navbar = () => {
 
                           {
                             isDropDownOpen && (
-                                <div className='absolute right-0 mt-3 p-4 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50'>
+                                <div className='absolute right-0 mt-3 p-4 w-54 bg-white border border-gray-200 rounded-lg shadow-lg z-50'>
                                     <ul className='font-medium space-y-4 p-2'>
                                         {dropdownMenus.map((menu, index) => (
                                             <li key={index}>

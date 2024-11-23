@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 //import axios from 'axios';
 //import { getBaseUrl } from "../../../../utils/baseURL";
-import { useFetchProductByIdQuery, useUpdateProductMutation, useImageDeleteMutation } from '../../../../redux/features/products/productsApi';
+import { useFetchProductByIdQuery, useUpdateProductMutation, useImageDeleteMutation, useGetCategoriesQuery } from '../../../../redux/features/products/productsApi';
 import { useSelector } from 'react-redux';
 import TextInput from '../addProduct/TextInput';
 import SelectInput from '../addProduct/SelectInput';
 import UploadImage from '../addProduct/UploadImage';
 
-const categories = [
+/*const categories = [
     { label: 'Select Category', value: '' },
     { label: 'Accessories', value: 'accessories' },
     { label: 'Dress-Boys', value: 'dressboys' },
@@ -16,7 +16,7 @@ const categories = [
     { label: 'Footwear-Boys', value: 'footwearboys' },
     { label: 'Footwear-Girls', value: 'footweargirls' },
     { label: 'Toys', value: 'toys' }
-];
+];*/
 
 const agegroups = [
     { label: 'Select Agegroup', value: '' },
@@ -30,6 +30,7 @@ const agegroups = [
 
 const UpdateProduct = () => {
     const [imageDelete ] = useImageDeleteMutation();
+    const { data: categories = [] } = useGetCategoriesQuery();
     const {id} = useParams();
     const navigate =  useNavigate();
     const {user} = useSelector((state) => state.auth)
