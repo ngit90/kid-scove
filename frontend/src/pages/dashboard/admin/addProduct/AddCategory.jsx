@@ -88,7 +88,7 @@ const uploadImage = async (event) => {
             setCategory({ label: '',
                 value: ''})
             setImage('');
-                navigate("/shop")
+                navigate("/")
         } catch (error) {
             console.log("Failed to submit category", error);
         }

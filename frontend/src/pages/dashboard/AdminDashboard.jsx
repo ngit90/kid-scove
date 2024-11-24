@@ -6,11 +6,9 @@ import { logout } from '../../redux/features/auth/authSlice';
 
 const navItems = [
     { path: '/dashboard/admin', label: 'Dashboard' },
-    { path: '/dashboard/add-product', label: 'Add Product'  },
-    { path: '/dashboard/add-category', label: 'Add Category'  },
     { path: '/dashboard/manage-products', label: 'Manage Products' },
     { path: '/dashboard/manage-categories', label: 'Manage Categories' },
-    { path: '/dashboard/users', label: 'Users'  },
+    { path: '/dashboard/users', label: 'Manage Users'  },
     { path: '/dashboard/manage-orders', label: 'Manage Orders'  },
 ]
 const AdminDashboard = () => {
@@ -31,6 +29,7 @@ const AdminDashboard = () => {
   return (
     <div className='space-y-5 bg-white p-8 md:h-screen flex flex-col justify-between'>
             <div>
+            <Link to="/" className='text-red-500 px-1 underline'>Back</Link>
                 <div className='nav__logo'>
                     <Link to="/">Kid'sCove<span>.</span></Link>
                     <p className='text-xs italic'>User dashboard</p>

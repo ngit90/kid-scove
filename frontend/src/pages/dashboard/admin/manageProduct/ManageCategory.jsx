@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { useGetCategoriesQuery, useDeleteCategoryMutation } from '../../../../redux/features/products/productsApi'
 import { formatDate } from '../../../../utils/formateDate';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ManageCategory = () => {
 
     const { data: categories = [],  refetch } = useGetCategoriesQuery();
-
-    
-
+    const Navigate = useNavigate();
     const [deleteCategory] = useDeleteCategoryMutation();
 
     const handleDeleteCategory = async (catId) => {
@@ -35,7 +33,7 @@ const ManageCategory = () => {
                                     <h3 className="font-semibold text-base text-blueGray-700">All Categories</h3>
                                 </div>
                                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                                    <button className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">See all</button>
+                                    <button onClick={()=> Navigate('/dashboard/add-category')} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">Add Category</button>
                                 </div>
                             </div>
                         </div>

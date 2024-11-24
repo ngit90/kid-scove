@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import { Link, useParams } from 'react-router-dom'
 import RatingStars from '../../../components/RatingStars';
+import ProductCards from '../ProductCards';
 import {useDispatch} from "react-redux"
-import { useFetchProductByIdQuery } from '../../../redux/features/products/productsApi';
+import { useFetchProductByIdQuery, useFetchRelatedProductsQuery } from '../../../redux/features/products/productsApi';
 import { addToCart } from '../../../redux/features/cart/cartSlice';
 import ReviewsCard from '../reviews/ReviewsCard';
 
@@ -11,7 +12,7 @@ const SingleProduct = () => {
 
     const dispatch =  useDispatch();
     const {data, error, isLoading} = useFetchProductByIdQuery(id);
-   
+    const {related = [], errors, isLoad} = useFetchRelatedProductsQuery(id);
     const singleProduct = data?.product || {};
     const productReviews = data?.reviews || [];
     const [selectedImage, setSelectedImage] = useState(null);   
@@ -119,6 +120,10 @@ const SingleProduct = () => {
             <section className='section__container mt-8'>
                 <ReviewsCard productReviews = {productReviews}/>
             </section>
+            {/* products card */}
+            <div className='mt-12 mx-20'>
+            <ProductCards products={related}/>
+            </div>
         </>
     )
 }

@@ -8,15 +8,6 @@ import TextInput from '../addProduct/TextInput';
 import SelectInput from '../addProduct/SelectInput';
 import UploadImage from '../addProduct/UploadImage';
 
-/*const categories = [
-    { label: 'Select Category', value: '' },
-    { label: 'Accessories', value: 'accessories' },
-    { label: 'Dress-Boys', value: 'dressboys' },
-    { label: 'Dress-Girls', value: 'dressgirls' },
-    { label: 'Footwear-Boys', value: 'footwearboys' },
-    { label: 'Footwear-Girls', value: 'footweargirls' },
-    { label: 'Toys', value: 'toys' }
-];*/
 
 const agegroups = [
     { label: 'Select Agegroup', value: '' },

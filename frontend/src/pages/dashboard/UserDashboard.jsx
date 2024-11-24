@@ -32,6 +32,7 @@ const UserDashboard = () => {
     return (
         <div className='space-y-5 bg-white p-8 md:h-screen flex flex-col justify-between'>
             <div>
+            <Link to="/" className='text-red-500 px-1 underline'>Back</Link>
                 <div className='nav__logo'>
                     <Link to="/">Kid'sCove<span>.</span></Link>
                     <p className='text-xs italic'>User dashboard</p>

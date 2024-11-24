@@ -20,27 +20,27 @@ const UpdateCategory = () => {
     const {data: catData, isLoading: isCatLoading, error: fetchError, refetch} = useFetchCategoryByIdQuery(id);
     const {label, value, image } = catData?.cat || {};
     const [updateCategory, {isLoading:isUpdating, error: updateError}] = useUpdateCategoryMutation();
-    //console.log('catdata',catData);
+    //console.log('catdata',label, value, image);
     useEffect(()=> {
         if(catData){
             setCat({
-                label: cat.label || '',
-                value: cat.value || '',
-                image: cat.image || ''
+                label: label || '',
+                value: value || '',
             })
+            setNewImage(image || '')
         }
     }, [catData])
 
     
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log('name value', name, value);
+        //console.log('name value', name, value);
 
         setCat({
             ...cat,
             [name]: value
         });
-        console.log('handle',cat);
+        //console.log('handle',cat);
 
     };
 
@@ -75,7 +75,7 @@ const UpdateCategory = () => {
         // Handle file selection and upload
         const uploadImage = async (event) => {
         const files = event.target.files;
-        console.log('files',files);
+        //console.log('files',files);
         if (files.length === 0) {
         return;
         }
@@ -97,11 +97,11 @@ const UpdateCategory = () => {
             image: newimage || image, 
             author: user?._id
         };
-        console.log('updated cat',updatedCat);
+        //console.log('updated cat',updatedCat);
         try {
             await updateCategory({id: id, ...updatedCat}).unwrap();
             alert('Category updated successfully');
-            //await refetch();
+            await refetch();
             navigate("/dashboard/manage-categories")
         } catch (error) {
             console.error('Failed to update Category:', error);
@@ -139,7 +139,7 @@ const UpdateCategory = () => {
                         className='add-product-InputCSS' />
 
                     <div className="mt-4 flex gap-2 flex-wrap">
-                        <img src={image || newimage} alt="" className="w-20 h-20 object-cover rounded" />
+                        <img src={newimage} alt="" className="w-20 h-20 object-cover rounded" />
                     </div>
                 </div>
                 
