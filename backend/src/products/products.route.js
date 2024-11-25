@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const Products = require("./products.model");
 const Category = require("./category.model")
 const Reviews = require("../reviews/reviews.model");
@@ -185,19 +186,19 @@ router.get("/related/:id", async (req, res) => {
     const titleRegex = new RegExp(
       product.name
         .split(" ")
-        .filter((word) => word.length > 1)
+        .filter((word) => word.length > 2)
         .join("|"),
-      "i"
+        "i"
     );
-
+  
     const relatedProducts = await Products.find({
       _id: { $ne: id }, // Exclude the current product
       $or: [
-        { name: { $regex: titleRegex } }, // Match similar names
-        { category: product.category }, // Match the same category
+        { name: { $regex: titleRegex} }, // Match similar names
+        { category: product.category}, // Match the same category
       ],
     });
-
+    //console.log(relatedProducts);
     res.status(200).send(relatedProducts);
 
   } catch (error) {
@@ -251,9 +252,13 @@ router.delete("/category/:id", async (req, res) => {
     const catId = req.params.id;
     console.log('catid',catId);
     const deletedCat = await Category.findByIdAndDelete(catId);
+    console.log('deletedcat',deletedCat);
     if (!deletedCat) {
       return res.status(404).send({ message: "Category not found" });
     }
+    // Delete products with this category
+    const deletedProducts = await Products.deleteMany({ category: deletedCat.value });
+    console.log('Deleted products:', deletedProducts);
 
     res.status(200).send({message: "Category deleted successfully"});
   } catch (error) {
@@ -285,6 +290,8 @@ router.get("/category/:id", async (req, res) => {
 router.patch("/update-category/:id", verifyToken, verifyAdmin, async (req, res) => {
   try {
     const catId = req.params.id;
+    const categ = await Category.findById(catId);
+    //console.log('category',categ);
     const updatedCategory = await Category.findByIdAndUpdate(
       catId,
       { ...req.body },
@@ -293,6 +300,16 @@ router.patch("/update-category/:id", verifyToken, verifyAdmin, async (req, res) 
 
     if (!updatedCategory) {
       return res.status(404).send({ message: "Category not found" });
+    }
+
+    // If category name changes, update associated products
+    if (updatedCategory.label) {
+      const updatedProducts = await Products.updateMany(
+        { category: categ.value  }, // Find products with this category value
+        { category: updatedCategory.value } // Update products with new category value
+      );
+
+      //console.log("Updated products:", updatedProducts);
     }
 
     res.status(200).send({

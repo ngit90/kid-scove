@@ -12,7 +12,8 @@ const SingleProduct = () => {
 
     const dispatch =  useDispatch();
     const {data, error, isLoading} = useFetchProductByIdQuery(id);
-    const {related = [], errors, isLoad} = useFetchRelatedProductsQuery(id);
+    const {data :related = []} = useFetchRelatedProductsQuery(id);
+    //console.log('related',related);
     const singleProduct = data?.product || {};
     const productReviews = data?.reviews || [];
     const [selectedImage, setSelectedImage] = useState(null);   
@@ -72,7 +73,7 @@ const SingleProduct = () => {
                         <h3 className='text-2xl font-semibold mb-4'>{singleProduct?.name}</h3>
                         <p className='text-xl text-primary mb-4 space-x-1'>
                             Rs.{singleProduct?.price} /-
-                             {singleProduct?.oldPrice && <s className='ml-1'>Rs.{singleProduct?.oldPrice} /-</s>}
+                             {singleProduct?.oldprice && <s className='ml-5'>Rs.{singleProduct?.oldprice} /-</s>}
                             </p>
                         <p className='text-gray-400 mb-4'>{singleProduct?.description}</p>
 
@@ -122,6 +123,7 @@ const SingleProduct = () => {
             </section>
             {/* products card */}
             <div className='mt-12 mx-20'>
+            <h3 className='text-2xl font-semibold mb-4'>Related Products....</h3>
             <ProductCards products={related}/>
             </div>
         </>

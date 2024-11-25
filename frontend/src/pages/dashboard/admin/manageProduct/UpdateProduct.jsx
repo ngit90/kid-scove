@@ -38,7 +38,7 @@ const UpdateProduct = () => {
     const {data: productData, isLoading: isProductLoading, error: fetchError, refetch} = useFetchProductByIdQuery(id);
 
     const [newImages, setNewImages] = useState([])
-    const {name, category, agegroup, description, images, price, stock } = productData?.product || {};
+    const {name, category, agegroup, description, images, price,oldprice, stock } = productData?.product || {};
 
     const [updateProduct, {isLoading:isUpdating, error: updateError}] = useUpdateProductMutation();
 
@@ -49,6 +49,7 @@ const UpdateProduct = () => {
                 category: category || '',
                 agegroup: agegroup || '',
                 price: price || '',
+                oldprice: oldprice || '',
                 stock: stock || '',
                 description: description || '',
                 images: images || []
@@ -86,6 +87,7 @@ const UpdateProduct = () => {
             category: category || '',
             agegroup: agegroup || '',
             price: price || '',
+            oldprice: oldprice || '',
             stock: stock || '',
             description: description || '',
             images: response.updatedProduct.images || []
@@ -153,6 +155,14 @@ const UpdateProduct = () => {
                     type="number"
                     placeholder="50"
                     value={product.price}
+                    onChange={handleChange}
+                />
+                <TextInput
+                    label="Old_Price"
+                    name="oldprice"
+                    type="number"
+                    placeholder="50"
+                    value={product.oldprice}
                     onChange={handleChange}
                 />
                 <TextInput

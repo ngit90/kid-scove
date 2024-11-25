@@ -88,7 +88,9 @@ const productsApi = createApi({
 
     fetchRelatedProducts: builder.query({
       query: (id) => `/related/${id}`,
+      providesTags: (result, error, id) => [{ type: "Products", id }],
     }),
+
     updateProduct: builder.mutation({
       query: ({ id, ...rest }) => ({
         url: `update-product/${id}`,
