@@ -12,12 +12,12 @@ const router = express.Router();
 router.post("/send-otp", async (req, res) => {
   try {
     const { email, username, password } = req.body;
-    console.log("Request received for email:", email);
+    //console.log("Request received for email:", email);
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log("User already exists:", email);
+      //console.log("User already exists:", email);
       return res.status(409).send({ message: "User with given email already exists!" });
     }
     // Proceed with registration
@@ -27,7 +27,7 @@ router.post("/send-otp", async (req, res) => {
     }
     // Generate a 6-digit OTP
     const otpCode = crypto.randomInt(100000, 999999).toString();
-    console.log("Generated OTP:", otpCode);
+    //console.log("Generated OTP:", otpCode);
 
     // Save OTP in the database
     const otp = new OTP({
@@ -36,8 +36,8 @@ router.post("/send-otp", async (req, res) => {
       expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
     });
     await otp.save();
-    console.log("OTP saved to database for email:", email);
-    console.log(otp.expiresAt);
+    //console.log("OTP saved to database for email:", email);
+    //console.log(otp.expiresAt);
 
     // Configure Nodemailer
     const transporter = nodemailer.createTransport({
@@ -56,7 +56,7 @@ router.post("/send-otp", async (req, res) => {
       text: `Your OTP code is ${otpCode}. It will expire in 5 minutes.`,
     };
     await transporter.sendMail(mailOptions);
-    console.log("OTP email sent successfully to:", email);
+    //console.log("OTP email sent successfully to:", email);
 
     res.status(200).send({ message: "OTP sent successfully!" });
   } catch (error) {
@@ -71,8 +71,8 @@ router.post("/verify-otp", async (req, res) => {
 
     // Find the OTP in the database
     const otpEntry = await OTP.findOne({ email, code: otp });
-    console.log(otp);
-    console.log(otpEntry);
+    //console.log(otp);
+    //console.log(otpEntry);
     if (!otpEntry) {
       return res.status(400).send({ message: "Invalid or expired OTP" });
     }
@@ -236,12 +236,12 @@ router.patch("/edit-profile", async (req, res) => {
 router.post("/sendpass-otp", async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("Request received for email:", email);
+    //console.log("Request received for email:", email);
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      console.log("User not exists:", email);
+      //console.log("User not exists:", email);
       return res.status(409).send({ message: "User with given email not exists!" });
     }
     // Proceed with registration
@@ -251,7 +251,7 @@ router.post("/sendpass-otp", async (req, res) => {
     }
     // Generate a 6-digit OTP
     const otpCode = crypto.randomInt(100000, 999999).toString();
-    console.log("Generated OTP:", otpCode);
+    //console.log("Generated OTP:", otpCode);
 
     // Save OTP in the database
     const otp = new OTP({
@@ -260,8 +260,8 @@ router.post("/sendpass-otp", async (req, res) => {
       expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
     });
     await otp.save();
-    console.log("OTP saved to database for email:", email);
-    console.log(otp.expiresAt);
+   // console.log("OTP saved to database for email:", email);
+    //console.log(otp.expiresAt);
 
     // Configure Nodemailer
     const transporter = nodemailer.createTransport({
@@ -280,7 +280,7 @@ router.post("/sendpass-otp", async (req, res) => {
       text: `Your OTP code is ${otpCode}. It will expire in 5 minutes.`,
     };
     await transporter.sendMail(mailOptions);
-    console.log("OTP email sent successfully to:", email);
+    //console.log("OTP email sent successfully to:", email);
 
     res.status(200).send({ message: "OTP sent successfully!" });
   } catch (error) {
@@ -296,8 +296,8 @@ router.post("/forgotpass", async (req, res) => {
 
     // Find the OTP in the database
     const otpEntry = await OTP.findOne({ email, code: otp });
-    console.log(otp);
-    console.log(otpEntry);
+    //console.log(otp);
+    //console.log(otpEntry);
     if (!otpEntry) {
       return res.status(400).send({ message: "Invalid or expired OTP" });
     }

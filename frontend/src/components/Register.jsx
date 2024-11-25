@@ -30,6 +30,8 @@ const Register = () => {
             const response =  await sendOtp(data).unwrap();
             setMessage('OTP sent to your email!');
             setStep(2); // Move to OTP verification step
+            setResendCooldown(true); // Start cooldown
+            setTimer(300); // Set cooldown time (e.g., 10 seconds)
         } catch (error) {
             console.log(error);
             setErrors(error.data.message || 'Failed to send OTP');
@@ -47,7 +49,7 @@ const Register = () => {
         }
         try {
             const response =  await verifyOtp(userdata).unwrap();
-            console.log(response);
+            //console.log(response);
                 alert('Registration successful!');
                 navigate('/login');
         } catch (error) {
@@ -67,8 +69,8 @@ const Register = () => {
             const response =  await sendOtp(data).unwrap();
             setMessage('OTP sent to your email!');
             setOtp('');
-            setResendCooldown(true); // Start cooldown
-            setTimer(10); // Set cooldown time (e.g., 10 seconds)
+            //setResendCooldown(true); // Start cooldown
+            //setTimer(10); // Set cooldown time (e.g., 10 seconds)
         } catch (error) {
             setErrors(error.data.message || 'Failed to resend OTP');
         }
@@ -86,6 +88,14 @@ const Register = () => {
         }
         return () => clearInterval(interval);
     }, [resendCooldown, timer]);
+
+    // Convert seconds to minute:second format
+    const formatTime = (timeInSeconds) => {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+        return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    };
+
 
     return (
         <section className='h-screen flex items-center justify-center'>
@@ -138,7 +148,7 @@ const Register = () => {
                         <div className="text-center mt-5">
                             {resendCooldown ? (
                                 <p className="text-sm text-gray-500">
-                                    Please wait {timer} seconds to resend OTP.
+                                    Please wait {formatTime(timer)} to resend OTP.
                                 </p>
                             ) : (
                                 <button
