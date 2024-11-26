@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDeleteProductMutation, useFetchAllProductsQuery } from '../../../../redux/features/products/productsApi'
+import { useDeleteProductMutation, useFetchAllProductsAdminQuery } from '../../../../redux/features/products/productsApi'
 import { formatDate } from '../../../../utils/formateDate';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ const ManageProduct = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const Navigate = useNavigate();
     const [productsPerPage] = useState(12)
-    const { data: { products = [], totalPages, totalProducts } = {}, isLoading, error, refetch } = useFetchAllProductsQuery({
+    const { data: { products = [], totalPages, totalProducts } = {}, isLoading, error, refetch } = useFetchAllProductsAdminQuery({
         category: '',
         agegroup: '',
         minPrice: '',
@@ -78,6 +78,9 @@ const ManageProduct = () => {
                                             Stock
                                         </th>
                                         <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            DelStatus
+                                        </th>
+                                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                             Action
                                         </th>
                                         <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
@@ -101,6 +104,9 @@ const ManageProduct = () => {
                                                 </td>
                                                 <td className="border-t-0 px-10 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
                                                     {product?.stock}
+                                                </td>
+                                                <td className="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                                                    {product?.delstats}
                                                 </td>
                                                 <td className="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 cursor-pointer hover:text-primary">
                                                     <Link to={`/dashboard/update-product/${product._id}`}> Edit</Link>

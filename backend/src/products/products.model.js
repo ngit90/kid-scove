@@ -10,6 +10,7 @@ const ProductSchema = new mongoose.Schema(
     oldprice: { type: Number },
     images: { type: [String], required: true },
     agegroup: { type: String },
+    delstats: {type : String, default:"actived"},
     rating: { type: Number, default: 0 },
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
   },

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useGetCategoriesQuery, useDeleteCategoryMutation } from '../../../../redux/features/products/productsApi'
+import { useGetCategoriesAdminQuery, useDeleteCategoryMutation } from '../../../../redux/features/products/productsApi'
 import { formatDate } from '../../../../utils/formateDate';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ManageCategory = () => {
 
-    const { data: categories = [],  refetch } = useGetCategoriesQuery();
+    const { data: categories = [],  refetch } = useGetCategoriesAdminQuery();
     const Navigate = useNavigate();
     const [deleteCategory] = useDeleteCategoryMutation();
 
@@ -52,6 +52,9 @@ const ManageCategory = () => {
                                             Publishing date
                                         </th>
                                         <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Del Status
+                                        </th>
+                                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                             Action
                                         </th>
                                         <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
@@ -72,6 +75,9 @@ const ManageCategory = () => {
                                                 </td>
                                                 <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                                     {formatDate(cat?.createdAt)}
+                                                </td>
+                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                                                    {cat?.delstats}
                                                 </td>
                                                 <td className="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 cursor-pointer hover:text-primary">
                                                     <Link to={`/dashboard/update-category/${cat._id}`}> Edit</Link>

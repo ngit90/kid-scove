@@ -8,11 +8,11 @@ const ManageUser = () => {
     const [selectedUser, setSelectedUser] = useState(null)
     const { data: users = [], error, isLoading, refetch } = useGetUserQuery();
 
-    console.log(users)
+    //console.log(users)
 
-    const [deleteUser] = useDeleteUserMutation()
+    //const [deleteUser] = useDeleteUserMutation()
 
-    const handleDelete = async (id) => {
+    /*const handleDelete = async (id) => {
         try {
             const response = await deleteUser(id).unwrap();
             alert("User deleted successfully!")
@@ -21,7 +21,7 @@ const ManageUser = () => {
         } catch (error) {
             console.error("Failed to delete user", error);
         }
-    }
+    }*/
 
     const handleEdit = (user) => {
         setSelectedUser(user)
@@ -75,9 +75,7 @@ const ManageUser = () => {
                                         <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                             Action
                                         </th>
-                                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                            Action
-                                        </th>
+                                       
                                     </tr>
                                 </thead>
 
@@ -121,11 +119,7 @@ const ManageUser = () => {
                                                         Edit
                                                     </button>
                                                 </td>
-                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                    <button
-                                                        onClick={() => handleDelete(user?._id)}
-                                                        className='bg-red-600 text-white px-2 py-1'>Delete</button>
-                                                </td>
+                                                
                                             </tr>
                                         ))
                                     }

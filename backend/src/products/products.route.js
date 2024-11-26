@@ -35,7 +35,7 @@ router.post("/create-product", async (req, res) => {
 // get all products
 router.get("/list", async (req, res) => {
   try {
-    const products = await Products.find({});
+    const products = await Products.find({delstats:"actived"});
     res.status(200).send(products);
   } catch (error) {
     console.error("Error fetching productss", error);
@@ -43,10 +43,22 @@ router.get("/list", async (req, res) => {
   }
 });
 
+
 // get all categories
 router.get("/categorylist", async (req, res) => {
   try {
-    const categories = await Category.find({});
+    const categories = await Category.find({delstats:"actived"});
+    res.status(200).send(categories);
+  } catch (error) {
+    console.error("Error fetching categories", error);
+    res.status(500).send({ message: "Error fetching categories" });
+  }
+});
+
+// get all categoriesadmin
+router.get("/categorylistadmin", async (req, res) => {
+  try {
+    const categories = await Category.find();
     res.status(200).send(categories);
   } catch (error) {
     console.error("Error fetching categories", error);
@@ -83,17 +95,66 @@ router.get("/", async (req, res) => {
         filter.price = { $gte: min, $lte: max };
       }
     }
+    //console.log('filter',filter);
+    filter.delstats = 'actived';
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const totalProducts = await Products.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / parseInt(limit));
-
+  
     const products = await Products.find(filter)
       .skip(skip)
       .limit(parseInt(limit))
       .populate("author", "email")
       .sort({ createdAt: -1 });
+    res.status(200).send({ products, totalPages, totalProducts });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).send({ message: "Failed to fetch products" });
+  }
+});
 
+// get all products admin
+router.get("/admin/", async (req, res) => {
+  try {
+    const {
+      category,
+      agegroup,
+      minPrice,
+      maxPrice,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {};
+
+    if (category && category !== "all") {
+      filter.category = category;
+    }
+
+    if (agegroup && agegroup !== "all") {
+      filter.agegroup = agegroup;
+    }
+
+    if (minPrice && maxPrice) {
+      const min = parseFloat(minPrice);
+      const max = parseFloat(maxPrice);
+      if (!isNaN(min) && !isNaN(max)) {
+        filter.price = { $gte: min, $lte: max };
+      }
+    }
+    //console.log('filter',filter);
+    //filter.delstats = 'actived';
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const totalProducts = await Products.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / parseInt(limit));
+  
+    const products = await Products.find(filter)
+      .skip(skip)
+      .limit(parseInt(limit))
+      .populate("author", "email")
+      .sort({ createdAt: -1 });
     res.status(200).send({ products, totalPages, totalProducts });
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -110,6 +171,9 @@ router.get("/:id", async (req, res) => {
       "email username"
     );
     if (!product) {
+      return res.status(404).send({ message: "Product not found" });
+    }
+    if (product.delstats === 'deleted') {
       return res.status(404).send({ message: "Product not found" });
     }
     const reviews = await Reviews.find({productId}).populate(
@@ -136,6 +200,9 @@ router.patch("/update-product/:id", verifyToken, verifyAdmin, async (req, res) =
     if (!updatedProduct) {
       return res.status(404).send({ message: "Product not found" });
     }
+    if (updatedProduct.delstats === 'deleted') {
+      return res.status(404).send({ message: "Product not found" });
+    }
 
     res.status(200).send({
       message: "Product updated successfully",
@@ -152,7 +219,7 @@ router.patch("/update-product/:id", verifyToken, verifyAdmin, async (req, res) =
 router.delete("/:id", async (req, res) => {
   try {
     const productId = req.params.id;
-    const deletedProduct = await Products.findByIdAndDelete(productId);
+    const deletedProduct = await Products.findByIdAndUpdate(productId, {delstats:"deleted"});
 
     if (!deletedProduct) {
       return res.status(404).send({ message: "Product not found" });
@@ -182,6 +249,9 @@ router.get("/related/:id", async (req, res) => {
     if (!product) {
       return res.status(404).send({ message: "Product not found" });
     }
+    if (product.delstats === 'deleted') {
+      return res.status(404).send({ message: "Product not found" });
+    }
 
     const titleRegex = new RegExp(
       product.name
@@ -192,7 +262,8 @@ router.get("/related/:id", async (req, res) => {
     );
   
     const relatedProducts = await Products.find({
-      _id: { $ne: id }, // Exclude the current product
+      _id: { $ne: id }, 
+      delstats: {$ne: 'deleted'},
       $or: [
         { name: { $regex: titleRegex} }, // Match similar names
         { category: product.category}, // Match the same category
@@ -251,13 +322,13 @@ router.delete("/category/:id", async (req, res) => {
   try {
     const catId = req.params.id;
     console.log('catid',catId);
-    const deletedCat = await Category.findByIdAndDelete(catId);
+    const deletedCat = await Category.findByIdAndUpdate(catId,{delstats:"deleted"});
     console.log('deletedcat',deletedCat);
     if (!deletedCat) {
       return res.status(404).send({ message: "Category not found" });
     }
     // Delete products with this category
-    const deletedProducts = await Products.deleteMany({ category: deletedCat.value });
+    const deletedProducts = await Products.updateMany({ category: deletedCat.value },{delstats:"deleted"});
     console.log('Deleted products:', deletedProducts);
 
     res.status(200).send({message: "Category deleted successfully"});
@@ -276,6 +347,9 @@ router.get("/category/:id", async (req, res) => {
       "email username"
     );
     if (!cat) {
+      return res.status(404).send({ message: "Category not found" });
+    }
+    if (cat.delstats === 'deleted') {
       return res.status(404).send({ message: "Category not found" });
     }
    
@@ -299,6 +373,9 @@ router.patch("/update-category/:id", verifyToken, verifyAdmin, async (req, res) 
     );
 
     if (!updatedCategory) {
+      return res.status(404).send({ message: "Category not found" });
+    }
+    if (updatedCategory.delstats === 'deleted') {
       return res.status(404).send({ message: "Category not found" });
     }
 

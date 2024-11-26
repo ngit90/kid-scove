@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {useSelector } from 'react-redux';
+import Cropper from 'react-easy-crop';
+import getCroppedImg from '../manageProduct/cropImage'; // Helper function for cropping
 import TextInput from './TextInput';
 import axios from 'axios';
 import { getBaseUrl } from "../../../../utils/baseURL";
@@ -15,8 +17,13 @@ const AddCategory = () => {
         value: ''
     });
     const [AddCategory, {isLoading, error}] = useAddCategoryMutation();
-  
-
+    //////////////
+    const [imageSrc, setImageSrc] = useState(null);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [croppedImage, setCroppedImage] = useState(null);
+////////////////
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCategory({
@@ -29,50 +36,43 @@ const AddCategory = () => {
 
     const navigate = useNavigate();
 
-    // base64 functionality
-    const convertBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-
-            fileReader.onload = () => {
-                resolve(fileReader.result);
-            };
-
-            fileReader.onerror = (error) => {
-                reject(error);
-            };
-        });
-    };
-
-    // Upload a single Base64 image to the server
-    const uploadSingleImage = async (base64) => {
+    const handleCropComplete = (croppedArea, croppedAreaPixels) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+      };
+    
+      const showCroppedImage = async () => {
         try {
-            const res = await axios.post(`${getBaseUrl()}/uploadImage`, { image: base64 });
-            return res.data; // Assuming the server returns the uploaded image URL
-          } catch (error) {
-            console.error('Error uploading image:', error);
-            throw error;
-          }
+          const croppedImg = await getCroppedImg(imageSrc, croppedAreaPixels);
+          setCroppedImage(croppedImg);
+          setImage(croppedImg); // Update the state with the cropped image
+        } catch (e) {
+          console.error(e);
+        }
+      };
+    
+      const uploadSingleImage = async (base64) => {
+        try {
+          const res = await axios.post(`${getBaseUrl()}/uploadImage`, { image: base64 });
+          return res.data; // Assuming the server returns the uploaded image URL
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          throw error;
+        }
+      };
+    
+      const uploadImage = async (event) => {
+        const files = event.target.files;
+        if (files.length === 0) return;
+    
+        const reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+        reader.onload = () => {
+          setImageSrc(reader.result); // Load the image to the cropper
         };
-
-
-// Handle file selection and upload
-const uploadImage = async (event) => {
-    const files = event.target.files;
-    console.log('files',files);
-    if (files.length === 0) {
-      return;
-    }
-    try {
-        const base64 = await convertBase64(files[0]);
-        const imageUrl = await uploadSingleImage(base64); // Upload each image
-        setImage(imageUrl); // Pass the URLs to the parent component
-        alert('Images uploaded successfully!');
-      }catch (error) {
-      console.error('Error uploading images:', error);
-    }
-  };
+        reader.onerror = (error) => {
+          console.error('Error loading image:', error);
+        };
+      };
 
 
     const handleSubmit = async(e) => {
@@ -83,6 +83,9 @@ const uploadImage = async (event) => {
         }
 
         try {
+            if(croppedImage){
+                const imageUrl = await uploadSingleImage(croppedImage);
+            }
             await AddCategory({...category, image, author: user?._id}).unwrap();
             alert('Category added successfully');
             setCategory({ label: '',
@@ -120,9 +123,30 @@ const uploadImage = async (event) => {
                         onChange={uploadImage}
                         className='add-product-InputCSS' />
 
-                    <div className="mt-4 flex gap-2 flex-wrap">
-                        <img src={image} alt="" className="w-20 h-20 object-cover rounded" />
-                    </div>
+{imageSrc && (
+            <div className="relative w-80 h-80 bg-gray-200">
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={handleCropComplete}
+              />
+              <button
+                type="button"
+                onClick={showCroppedImage}
+                className="absolute bottom-2 right-2 bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Crop Image
+              </button>
+            </div>
+          )}
+         
+          <div className="mt-4 flex gap-2 flex-wrap">
+          <img src={croppedImage} alt="" className="w-20 h-20 object-cover rounded" />
+        </div>
                 </div>
                 <div>
                     <button type='submit'

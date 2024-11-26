@@ -33,6 +33,29 @@ const productsApi = createApi({
       providesTags: ["Products"],
     }),
 
+    fetchAllProductsAdmin: builder.query({
+      query: ({
+        category,
+        agegroup,
+        minPrice,
+        maxPrice,
+        page = 1,
+        limit = 10,
+      }) => {
+        const queryParams = new URLSearchParams({
+          category: category || "",
+          agegroup: agegroup || "",
+          minPrice: minPrice || 0,
+          maxPrice: maxPrice || "",
+          page: page.toString(),
+          limit: limit.toString(),
+        }).toString();
+
+        return `/admin/?${queryParams}`;
+      },
+      providesTags: ["Products"],
+    }),
+
     fetchProductById: builder.query({
       query: (id) => `/${id}`,
       providesTags: (result, error, id) => [{ type: "Products", id }],
@@ -50,6 +73,15 @@ const productsApi = createApi({
     GetCategories: builder.query({
       query: () => ({
         url: "/categorylist",
+        method: "GET",
+      }),
+      refetchOnMountOrArgChange: true,
+      providesTags: ["Products"],
+    }),
+
+    GetCategoriesAdmin: builder.query({
+      query: () => ({
+        url: "/categorylistadmin",
         method: "GET",
       }),
       refetchOnMountOrArgChange: true,
@@ -136,6 +168,6 @@ const productsApi = createApi({
   }),
 });
 
-export const {useFetchAllProductsQuery, useFetchProductByIdQuery, useAddProductMutation,  useAddCategoryMutation,  useImageDeleteMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery, useGetProductsQuery, useGetCategoriesQuery, useDeleteCategoryMutation, useFetchCategoryByIdQuery, useUpdateCategoryMutation} = productsApi;
+export const {useFetchAllProductsQuery, useFetchAllProductsAdminQuery, useFetchProductByIdQuery, useAddProductMutation,  useAddCategoryMutation,  useImageDeleteMutation, useUpdateProductMutation, useDeleteProductMutation, useFetchRelatedProductsQuery, useGetProductsQuery, useGetCategoriesQuery, useGetCategoriesAdminQuery, useDeleteCategoryMutation, useFetchCategoryByIdQuery, useUpdateCategoryMutation} = productsApi;
 
 export default productsApi;
