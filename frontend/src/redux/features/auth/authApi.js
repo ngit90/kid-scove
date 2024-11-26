@@ -4,7 +4,7 @@ import { getBaseUrl } from "../../../utils/baseURL";
 const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${getBaseUrl()}/api/auth`,
+    baseUrl: `${getBaseUrl()}/api/user`,
     credentials: "include",
   }),
   tagTypes: ["User"],

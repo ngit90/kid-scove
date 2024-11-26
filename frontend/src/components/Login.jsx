@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useLoginUserMutation } from '../redux/features/auth/authApi';
 import { setUser } from '../redux/features/auth/authSlice';
 import { FaAngleDoubleLeft } from "react-icons/fa";
+import GoogleLoginPage from './GoogleLoginPage';
 
 const Login = () => {
     const [message, setMessage] = useState('');
@@ -67,6 +68,11 @@ const Login = () => {
 
                 <p className='my-5 italic text-sm text-center'>Don't have an account?
                     <Link to="/register" className='text-red-700 px-1 underline'>Register</Link> here.</p>
+
+                <div>
+                        <p> ----------------- OR----------------</p>
+                        <GoogleLoginPage />
+                </div>
             </div>
         </section>
     )
