@@ -70,6 +70,9 @@ app.post('/auth/google/callback', async (req, res) => {
 //console.log('userid',userId);
     // Find or create user in your database
     let user = await User.findOne({ googleId: userId });
+    if(user.status === 'block'){
+      return res.status(406).send({message: "User Blocked. Contact Cust. Care" })
+    }
     if (!user) {
       user = new User({
         googleId: userId,

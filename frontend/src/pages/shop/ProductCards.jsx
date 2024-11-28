@@ -1,13 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import RatingStars from '../../components/RatingStars'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../../redux/features/cart/cartSlice'
 
 const ProductCards = ({products}) => {
     const dispatch = useDispatch();
-
+    const { user } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
     const handleAddToCart = (product) => {
+        if(!user){
+            navigate('/login');
+        }
         dispatch(addToCart(product))
     }
  

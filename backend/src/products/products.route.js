@@ -308,7 +308,15 @@ router.post("/create-category", async (req, res) => {
     const newCategory = new Category({
       ...req.body,
     });
-
+    const {label, value} = req.body;
+    const categ = await Category.findOne({label });
+    if (categ) {
+      return res.status(400).send({ message: "Already exist actegory" });
+    }
+    const categ2 = await Category.findOne({ value });
+    if (categ2) {
+      return res.status(400).send({ message: "Already exist actegory" });
+    }
     const savedCategory = await newCategory.save();
     res.status(201).send(savedCategory);
   } catch (error) {

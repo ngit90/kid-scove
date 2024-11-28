@@ -15,7 +15,8 @@ const ManageCategory = () => {
             const response = await deleteCategory(catId).unwrap();
             console.log('res',response);
             alert("Category deleted successfully")
-            await refetch()
+            //await refetch()
+            window.location.reload();
 
         } catch (error) {
             console.error("Error deleting Category", error)

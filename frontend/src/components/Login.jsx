@@ -71,7 +71,7 @@ const Login = () => {
 
                 <div>
                         <p> ----------------- OR----------------</p>
-                        <GoogleLoginPage />
+                        <GoogleLoginPage setMessage={setMessage} />
                 </div>
             </div>
         </section>

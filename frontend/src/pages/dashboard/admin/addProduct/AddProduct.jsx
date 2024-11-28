@@ -20,6 +20,7 @@ const AddProduct = () => {
     const { user } = useSelector((state) => state.auth);
     const { data: categories = [],  refetch } = useGetCategoriesQuery();
     //console.log('categories', categories);
+  
     const [product, setProduct] = useState({
         name: '',
         category: '',
@@ -67,7 +68,9 @@ const AddProduct = () => {
                 stock: '',
                 description: ''})
                 setImages([]);
-                navigate("/shop")
+                //window.location.reload();
+                await refetch();
+                navigate("/dashboard/manage-products")
         } catch (error) {
             console.log("Failed to submit product", error);
         }

@@ -30,6 +30,7 @@ const UpdateProduct = () => {
         category: '',
         agegroup: '',
         price: '',
+        oldprice: '',
         stock:'',
         description: '',
         images: []
@@ -110,11 +111,15 @@ const UpdateProduct = () => {
             images: images.concat(newImages), 
             author: user?._id
         };
+        if(!product.name || !product.category || !product.price || !product.stock || !product.description || !product.agegroup || images.length === 0) {
+            alert('Please fill all the required fields');
+            return;
+        }
 
         try {
             await updateProduct({id: id, ...updatedProduct}).unwrap();
             alert('Product updated successfully');
-            await refetch();
+            window.location.reload();
             navigate("/dashboard/manage-products")
         } catch (error) {
             console.error('Failed to update product:', error);

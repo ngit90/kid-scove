@@ -101,10 +101,14 @@ useEffect(()=> {
           image: newImage || cat?.image, // Use the URL of the uploaded image
           author: user?._id,
         };
-
+        if(!cat.label || !cat.value || !image) {
+          alert('Please fill all the required fields');
+          return;
+      }
         await updateCategory({ id, ...updatedCat }).unwrap();
         alert('Category updated successfully');
-        await refetch();
+        //await refetch();
+        window.location.reload();
         navigate("/dashboard/manage-categories");
       } catch (error) {
         console.error('Failed to update Category:', error);

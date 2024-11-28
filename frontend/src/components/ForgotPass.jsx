@@ -25,12 +25,18 @@ const ForgotPass = () => {
             password
         }
         try {
-            setErrors('');
-            const response =  await sendPassOtp(data).unwrap();
-            setMessage('OTP sent to your email!');
-            setStep(2); // Move to OTP verification step
-            setResendCooldown(true); // Start cooldown
-            setTimer(300); // Set cooldown time (e.g., 10 seconds)
+            if(password !== confirmpassword){
+                setErrors("Password Mismatch");
+            }
+            else{
+                setErrors('');
+                const response =  await sendPassOtp(data).unwrap();
+                setMessage('OTP sent to your email!');
+                setStep(2); // Move to OTP verification step
+                setResendCooldown(true); // Start cooldown
+                setTimer(300); // Set cooldown time (e.g., 10 seconds)
+            }
+           
         } catch (error) {
             console.log(error);
             setErrors(error.data.message || 'Failed to send OTP');
@@ -63,9 +69,14 @@ const ForgotPass = () => {
             password
         }
         try {
+            if(password !== confirmpassword){
+                setErrors("Password Mismatch");
+            }
+            else{
             const response =  await sendPassOtp(data).unwrap();
             setMessage('OTP sent to your email!');
             setOtp('');
+            }
             //setResendCooldown(true); // Start cooldown
             //setTimer(10); // Set cooldown time (e.g., 10 seconds)
         } catch (error) {

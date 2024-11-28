@@ -91,8 +91,11 @@ const AddCategory = () => {
             setCategory({ label: '',
                 value: ''})
             setImage('');
-                navigate("/")
+            //window.location.reload();
+            await refetch();
+                navigate("/dashboard/manage-categories")
         } catch (error) {
+            alert(error.data.message);
             console.log("Failed to submit category", error);
         }
     }

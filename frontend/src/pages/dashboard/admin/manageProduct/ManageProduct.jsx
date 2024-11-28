@@ -30,7 +30,8 @@ const ManageProduct = () => {
         try {
             const response = await deleteProduct(id).unwrap();
             alert("Product deleted successfully")
-            await refetch()
+            //await refetch()
+            window.location.reload();
 
         } catch (error) {
             console.error("Error deleting product", error)
