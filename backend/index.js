@@ -29,31 +29,6 @@ app.use(passport.initialize());
 // Google OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-/*app.get(
-  '/auth/google/callback',
-  passport.authenticate('google', { session: false }), async (req, res) => {
-    const id = req.user._id;
-    console.log('id',req.user.id);
-    const user = await User.findOne({ id });
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
-    }
-    if (user.status === "block") {
-      return res.status(406).send({ message: "User Blocked. Contact Cust. Care" });
-    }
-  
-    // Generate a JWT token
-    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-
-    res.redirect(`http://localhost:5173?token=${token}&user=${user}`); // Redirect to frontend with token
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-    });
-  }
-);*/
 app.post('/auth/google/callback', async (req, res) => {
   const { token } = req.body;
 
@@ -109,13 +84,11 @@ const uploadImage = require("./src/utils/uploadImage");
 const authRoutes = require('./src/users/user.route');
 const productRoutes =  require('./src/products/products.route');
 const reviewRoutes = require('./src/reviews/reviews.router');
-const orderRoutes = require('./src/orders/orders.route');
 const statsRoutes = require('./src/stats/stats.route')
 
 app.use('/api/user', authRoutes);
 app.use('/api/products', productRoutes);
 app.use("/api/reviews", reviewRoutes);
-app.use('/api/orders', orderRoutes);
 app.use('/api/stats', statsRoutes)
 
 

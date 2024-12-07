@@ -8,13 +8,9 @@ import SingleProduct from "../pages/shop/productDetails/SingleProduct";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
-import PaymentSuccess from "../components/PaymentSuccess";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import UserDMain from "../pages/dashboard/user/dashboard/UserDMain";
-import UserOrders from "../pages/dashboard/user/UserOrders";
-import OrderDetails from "../pages/dashboard/user/OrderDetails";
-import UserPayments from "../pages/dashboard/user/UserPayments";
 import UserReviews from "../pages/dashboard/user/UserReviews";
 import UserProfile from "../pages/dashboard/user/UserProfile";
 import AdminDMain from "../pages/dashboard/admin/dashboard/AdminDMain";
@@ -22,12 +18,12 @@ import AddProduct from "../pages/dashboard/admin/addProduct/AddProduct";
 import ManageProduct from "../pages/dashboard/admin/manageProduct/ManageProduct";
 import UpdateProduct from "../pages/dashboard/admin/manageProduct/UpdateProduct";
 import ManageUser from "../pages/dashboard/admin/users/ManageUser";
-import ManageOrders from "../pages/dashboard/admin/manageOrders/ManageOrders";
 import Aboutpage from "../pages/about/About";
 import Contactpage from "../pages/contact/Contact";
 import AddCategory from "../pages/dashboard/admin/addProduct/AddCategory";
 import ManageCategory from "../pages/dashboard/admin/manageProduct/ManageCategory";
 import UpdateCategory from "../pages/dashboard/admin/manageProduct/UpdateCategory";
+import AddressSelect from "../pages/shop/AddressSelect";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -40,15 +36,6 @@ const router = createBrowserRouter([
             { path: "/search", element: <Search /> },
             { path: "/shop", element: <ShopPage /> },
             { path: "/shop/:id", element: <SingleProduct /> },
-            {
-                path: "/success",
-                element: <PaymentSuccess />
-            },
-            {
-                path: "/orders/:orderId",
-                element: <OrderDetails/>
-            }
-
         ]
     },
     {
@@ -63,6 +50,7 @@ const router = createBrowserRouter([
         path: "/forgotpass",
         element: <ForgotPass />
     },
+    { path: "/addressselect", element: <AddressSelect /> },
     // dashboard routes start here
     {
         path: "/dashboard",
@@ -70,8 +58,6 @@ const router = createBrowserRouter([
         children: [
             // user routes
             { path: '', element: <UserDMain/>},
-            { path: 'orders', element: <UserOrders/> },
-            { path: 'payments', element: <UserPayments/> },
             { path: 'profile', element: <UserProfile/> },
             { path: 'reviews', element: <UserReviews/> },
 
@@ -110,9 +96,6 @@ const router = createBrowserRouter([
                 element: <PrivateRoute role="admin"><UpdateCategory/></PrivateRoute>
             },
             { path: "users", element: <PrivateRoute role="admin"><ManageUser/></PrivateRoute> },
-            { path: "manage-orders", 
-              element: <PrivateRoute role="admin"><ManageOrders/></PrivateRoute> 
-            },
         ]
     }
 
