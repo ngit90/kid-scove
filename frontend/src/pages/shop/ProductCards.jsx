@@ -12,7 +12,10 @@ const ProductCards = ({products}) => {
         if(!user){
             navigate('/login');
         }
-        dispatch(addToCart(product))
+        else{
+            dispatch(addToCart(product))
+        }
+       
     }
  
   return (

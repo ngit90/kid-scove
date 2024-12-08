@@ -3,6 +3,7 @@ import { useLogoutUserMutation } from '../../redux/features/auth/authApi';
 import { useDispatch } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/features/auth/authSlice';
+import { clearCart } from '../../redux/features/cart/cartSlice';
 
 const navItems = [
     { path: '/dashboard/admin', label: 'Dashboard' },
@@ -18,6 +19,7 @@ const AdminDashboard = () => {
     const handleLogout = async () => {
         try {
             await logoutUser().unwrap();
+            dispatch(clearCart())
             dispatch(logout())
             navigate('/')
         } catch (error) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import OrderSummary from './OrderSummary';
 import AddressSelect from './AddressSelect';
@@ -6,12 +6,18 @@ import { removeFromCart, updateQuantity } from '../../redux/features/cart/cartSl
 
 const CartModal = ({ products, isOpen, onClose }) => {
   const dispatch = useDispatch();
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [isCheckout, setIsCheckout] = useState(false);
 
   const handleQuantity = (type, id) => {
     const payload = { type, id };
     dispatch(updateQuantity(payload));
   };
 
+  const handleAddressselect = (address)=>{
+    setSelectedAddress(address);
+    setIsCheckout(true);
+  }
   const handleRemove = (e, id) => {
     e.preventDefault();
     dispatch(removeFromCart({ id }));
@@ -90,13 +96,13 @@ const CartModal = ({ products, isOpen, onClose }) => {
             {/* Address Section */}
             <div className="md:w-1/2 w-full">
             {products.length > 0 && 
-              <AddressSelect /> }
+              <AddressSelect onAddressSelect = {handleAddressselect}/> }
             </div>
 
             {/* Order Summary Section */}
             <div className="md:w-1/2 w-full">
               {products.length > 0 ? (
-                <OrderSummary />
+                <OrderSummary  isCheckout={isCheckout} selectedAddress={selectedAddress}/>
               ) : (
                 <div>Your cart is empty</div>
               )}

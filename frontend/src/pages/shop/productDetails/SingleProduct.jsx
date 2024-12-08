@@ -1,16 +1,17 @@
 import React, {useState, useEffect} from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import RatingStars from '../../../components/RatingStars';
 import ProductCards from '../ProductCards';
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import { useFetchProductByIdQuery, useFetchRelatedProductsQuery } from '../../../redux/features/products/productsApi';
 import { addToCart } from '../../../redux/features/cart/cartSlice';
 import ReviewsCard from '../reviews/ReviewsCard';
 
 const SingleProduct = () => {
     const {id} = useParams();
-
+    const { user } = useSelector((state) => state.auth);
     const dispatch =  useDispatch();
+    const navigate = useNavigate();
     const {data, error, isLoading} = useFetchProductByIdQuery(id);
     const {data :related = []} = useFetchRelatedProductsQuery(id);
     //console.log('related',related);
@@ -25,7 +26,13 @@ const SingleProduct = () => {
         }
     }, [singleProduct]);
     const handleAddToCart = (product) => {
-        dispatch(addToCart(product))
+        if(!user){
+            navigate('/login');
+        }
+        else{
+            dispatch(addToCart(product))
+        }
+       
     }
     const handleThumbnailClick = (image) => {
         setSelectedImage(image);

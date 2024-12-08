@@ -5,6 +5,7 @@ import CartModal from '../pages/shop/CartModal';
 
 import avatarImg from "../assets/avatar.png"
 import { useLogoutUserMutation } from '../redux/features/auth/authApi';
+import { clearCart } from '../redux/features/cart/cartSlice';
 import { logout } from '../redux/features/auth/authSlice';
 
 const Navbar = () => {
@@ -47,6 +48,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             await logoutUser().unwrap();
+            dispatch(clearCart());
             dispatch(logout())
             navigate('/')
         } catch (error) {

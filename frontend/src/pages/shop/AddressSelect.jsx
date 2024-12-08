@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 
-export default function AddressSelect() {
+export default function AddressSelect({onAddressSelect}) {
 
     const [address, setAddress] = useState(false);
+    const [newAddress, setNewAddress] = useState({})
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -10,7 +11,7 @@ export default function AddressSelect() {
         street: '',
         city: '',
         state: '',
-        zipcode: '',
+        pincode: '',
         country: '',
         phone: ''
     })
@@ -19,9 +20,15 @@ export default function AddressSelect() {
         const name = event.target.name
         const value = event.target.value
         setFormData(data => ({ ...data, [name]: value }))
+        setNewAddress((prev) => ({ ...prev, [name]: value }));
     }
     const handlesubmit = ()=>{
         setAddress(true);
+
+        if(newAddress){
+            onAddressSelect(newAddress);
+            setNewAddress({});
+        }
     console.log("Address added");
     }
 
@@ -48,7 +55,7 @@ export default function AddressSelect() {
     <input onChange={onChangeHandler} name='state' value={formData.state} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='State' />
 </div>
 <div className='flex gap-3'>
-    <input required onChange={onChangeHandler} name='zipcode' value={formData.zipcode} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="number" placeholder='Zipcode' />
+    <input required onChange={onChangeHandler} name='pincode' value={formData.pincode} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="number" placeholder='pincode' />
     <input required onChange={onChangeHandler} name='country' value={formData.country} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='Country' />
 </div>
 <input required onChange={onChangeHandler} name='phone' value={formData.phone} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="number" placeholder='Phone' />

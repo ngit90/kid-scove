@@ -1,31 +1,45 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearCart } from '../../redux/features/cart/cartSlice';
-
-import { loadStripe } from "@stripe/stripe-js";
+import {useNavigate} from 'react-router-dom'
 import { getBaseUrl } from '../../utils/baseURL';
+import { useCreateOrderMutation } from '../../redux/features/orders/orderApi';
 
 
-const OrderSummary = () => {
+const OrderSummary = ({isCheckout, selectedAddress}) => {
     const dispatch = useDispatch()
     const {user} = useSelector(state => state.auth)
-
+    const navigate = useNavigate();
     const products = useSelector((store) => store.cart.products);
- 
+    console.log("products",products);
+    console.log(isCheckout);
     const { selectedItems, totalPrice, tax, taxRate, grandTotal } = useSelector((store) => store.cart);
+    const [CreateOrder, {isLoading, error}] = useCreateOrderMutation();
 
     const handleClearCart = () => {
         dispatch(clearCart())
     }
-
+    
     // payment integration
     const makePayment = async (e) => {
-        const body = {
+        const neworder = {
             products: products,
-            userId: user?._id
+            userId: user?._id,
+            address: selectedAddress,
+            amount: totalPrice,
         }
-        alert("Order created ");
-        Navigate('/dashboard');
+        if(isCheckout){
+            try {
+       
+                await CreateOrder(neworder);
+                alert("Order created ");
+                await refetch();
+                navigate('/dashboard');
+                console.log(selectedAddress);
+            } catch (error) {
+                console.log("Failed to submit order", error);
+            }
+        }
     }
 
     return (
@@ -46,14 +60,14 @@ const OrderSummary = () => {
                         <span className='mr-2'>Clear cart</span> 
                         <i className="ri-delete-bin-7-line"></i>
                     </button>
-                    
+                    {isCheckout && 
                     <button 
                     onClick={(e) => {
                         e.stopPropagation();
                         makePayment();
                        
                     }}
-                    className='bg-green-600 px-3 py-1.5 text-white  mt-2 rounded-md flex justify-between items-center'><span className='mr-2'>Proceed Checkout</span><i className="ri-bank-card-line"></i></button>
+                    className='bg-green-600 px-3 py-1.5 text-white  mt-2 rounded-md flex justify-between items-center'><span className='mr-2'>Proceed Checkout</span><i className="ri-bank-card-line"></i></button>}
                 </div>
             </div>
         </div>
