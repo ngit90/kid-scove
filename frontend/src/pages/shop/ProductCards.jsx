@@ -13,7 +13,13 @@ const ProductCards = ({products}) => {
             navigate('/login');
         }
         else{
-            dispatch(addToCart(product))
+            if(product.stock <= 0){
+                alert("Sorry.... Out of Stock")
+            }
+            else{
+                dispatch(addToCart(product))
+            }
+
         }
        
     }

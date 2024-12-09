@@ -119,8 +119,9 @@ const UpdateProduct = () => {
         try {
             await updateProduct({id: id, ...updatedProduct}).unwrap();
             alert('Product updated successfully');
-            window.location.reload();
             navigate("/dashboard/manage-products")
+            window.location.reload();
+          
         } catch (error) {
             console.error('Failed to update product:', error);
         }

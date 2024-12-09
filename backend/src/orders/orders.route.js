@@ -22,21 +22,21 @@ router.post("/checkout", async (req, res) => {
     console.log("saved",savedOrder);
     res.status(201).send({
       message: "Order created successfully",
-      orderId: savedOrder._id,
+      order: savedOrder,
     });
   } catch (err) {
     res.status(500).send({ message: "Failed to create order", error: err.message });
   }
 });
-// get order by email address
-router.get("/:email", async (req, res) => {
-  const email = req.params.email;
-  if (!email) {
-    return res.status(400).send({ message: "Email is required" });
+// get order by userid
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return res.status(400).send({ message: "UserID is required" });
   }
 
   try {
-    const orders = await Order.find({ email: email });
+    const orders = await Order.find({ userId: id });
 
     if (orders.length === 0 || !orders) {
       return res
@@ -50,8 +50,9 @@ router.get("/:email", async (req, res) => {
   }
 });
 
-// get order by id
+// get order by orderid
 router.get("/order/:id", async (req, res) => {
+  console.log(req.params.id);
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {

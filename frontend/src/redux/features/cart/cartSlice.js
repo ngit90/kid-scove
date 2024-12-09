@@ -33,7 +33,9 @@ const cartSlice = createSlice({
       const products = state.products.map((product) => {
         if(product._id === action.payload.id) {
           if(action.payload.type === 'increment'){
-            product.quantity += 1;
+            if(product.stock > product.quantity){
+              product.quantity += 1;
+            }
           } else if(action.payload.type === 'decrement'){
             if(product.quantity > 1) {
               product.quantity -= 1

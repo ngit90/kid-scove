@@ -8,9 +8,13 @@ import SingleProduct from "../pages/shop/productDetails/SingleProduct";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
+import PaymentSuccess from "../components/PaymentSuccess";
+import UserOrders from "../pages/dashboard/user/UserOrders";
+import OrderDetails from "../pages/dashboard/user/OrderDetails";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import UserDMain from "../pages/dashboard/user/dashboard/UserDMain";
+import ManageOrders from "../pages/dashboard/admin/manageOrders/ManageOrders";
 import UserReviews from "../pages/dashboard/user/UserReviews";
 import UserProfile from "../pages/dashboard/user/UserProfile";
 import AdminDMain from "../pages/dashboard/admin/dashboard/AdminDMain";
@@ -24,6 +28,7 @@ import AddCategory from "../pages/dashboard/admin/addProduct/AddCategory";
 import ManageCategory from "../pages/dashboard/admin/manageProduct/ManageCategory";
 import UpdateCategory from "../pages/dashboard/admin/manageProduct/UpdateCategory";
 import AddressSelect from "../pages/shop/AddressSelect";
+import AdminOrderDetails from "../pages/dashboard/admin/manageOrders/AdminOrderDetails";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -36,6 +41,14 @@ const router = createBrowserRouter([
             { path: "/search", element: <Search /> },
             { path: "/shop", element: <ShopPage /> },
             { path: "/shop/:id", element: <SingleProduct /> },
+            {
+                path: "/success/:id",
+                element: <PaymentSuccess />
+            },
+            {
+                path: "/orders/:id",
+                element: <OrderDetails/>
+            },
         ]
     },
     {
@@ -59,6 +72,7 @@ const router = createBrowserRouter([
             // user routes
             { path: '', element: <UserDMain/>},
             { path: 'profile', element: <UserProfile/> },
+            { path: 'orders', element: <UserOrders/> },
             { path: 'reviews', element: <UserReviews/> },
 
 
@@ -96,6 +110,16 @@ const router = createBrowserRouter([
                 element: <PrivateRoute role="admin"><UpdateCategory/></PrivateRoute>
             },
             { path: "users", element: <PrivateRoute role="admin"><ManageUser/></PrivateRoute> },
+            { path: "manage-orders", 
+                element: <PrivateRoute role="admin">
+                    <ManageOrders/>
+                    </PrivateRoute> 
+                },
+            { path: "manage-orders/adminorders/:id", 
+                    element: <PrivateRoute role="admin">
+                        <AdminOrderDetails />
+                        </PrivateRoute> 
+                    },
         ]
     }
 

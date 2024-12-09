@@ -31,7 +31,7 @@ const CartModal = ({ products, isOpen, onClose }) => {
       style={{ transition: 'opacity 300ms' }}
     >
       <div
-        className={`fixed right-0 top-0 w-full bg-white h-full overflow-y-auto transition-transform ${
+        className={`fixed right-0 top-0 w-full md:w-3/4 bg-white h-full overflow-y-auto transition-transform ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{ transition: 'transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94' }}
@@ -94,13 +94,13 @@ const CartModal = ({ products, isOpen, onClose }) => {
            {/* Main layout with AddressSelect and OrderSummary */}
            <div className="flex flex-col md:flex-row gap-8">
             {/* Address Section */}
-            <div className="md:w-1/2 w-full">
+            <div className="md:w-1/2 w-3/4">
             {products.length > 0 && 
               <AddressSelect onAddressSelect = {handleAddressselect}/> }
             </div>
 
             {/* Order Summary Section */}
-            <div className="md:w-1/2 w-full">
+            <div className="md:w-1/2 w-3/4">
               {products.length > 0 ? (
                 <OrderSummary  isCheckout={isCheckout} selectedAddress={selectedAddress}/>
               ) : (

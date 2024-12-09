@@ -35,12 +35,14 @@ const Navbar = () => {
         {label: "Manage Products", path: "/dashboard/manage-products"},
         {label: "Manage Users", path: "/dashboard/users"},
         {label: "Manage Categories", path: "/dashboard/manage-categories"},
+        {label: "Manage Orders", path: "/dashboard/manage-orders"},
     ]
 
     // user dropdown menus
     const userDropDownMenus = [
         {label: "Dashboard", path: "/dashboard"},
         {label: "Profile", path: "/dashboard/profile"},
+        {label: "Orders", path: "/dashboard/orders"},
     ]
 
     const dropdownMenus = user?.role === 'admin' ? [...adminDropDownMenus] : [...userDropDownMenus]

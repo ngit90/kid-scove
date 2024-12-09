@@ -107,9 +107,10 @@ useEffect(()=> {
       }
         await updateCategory({ id, ...updatedCat }).unwrap();
         alert('Category updated successfully');
+        navigate("/dashboard/manage-categories");
         //await refetch();
         window.location.reload();
-        navigate("/dashboard/manage-categories");
+       
       } catch (error) {
         console.error('Failed to update Category:', error);
       }

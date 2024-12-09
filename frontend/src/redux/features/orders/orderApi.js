@@ -19,8 +19,8 @@ const orderApi = createApi({
             invalidatesTags: ["Order"],
           }),
         getOrdersByEmail: builder.query({
-            query: (email) => ({
-                url: `/${email}`,
+            query: (id) => ({
+                url: `/${id}`,
                 method: 'GET'
             }),
             providesTags: ['Order']

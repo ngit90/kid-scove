@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearCart } from '../../redux/features/cart/cartSlice';
 import {useNavigate} from 'react-router-dom'
 import { getBaseUrl } from '../../utils/baseURL';
 import { useCreateOrderMutation } from '../../redux/features/orders/orderApi';
+import PaymentSuccess from '../../components/PaymentSuccess';
 
 
 const OrderSummary = ({isCheckout, selectedAddress}) => {
@@ -11,10 +12,9 @@ const OrderSummary = ({isCheckout, selectedAddress}) => {
     const {user} = useSelector(state => state.auth)
     const navigate = useNavigate();
     const products = useSelector((store) => store.cart.products);
-    console.log("products",products);
-    console.log(isCheckout);
     const { selectedItems, totalPrice, tax, taxRate, grandTotal } = useSelector((store) => store.cart);
     const [CreateOrder, {isLoading, error}] = useCreateOrderMutation();
+    const [order, setOrder] = useState(null);
 
     const handleClearCart = () => {
         dispatch(clearCart())
@@ -31,11 +31,16 @@ const OrderSummary = ({isCheckout, selectedAddress}) => {
         if(isCheckout){
             try {
        
-                await CreateOrder(neworder);
+                const response = await CreateOrder(neworder);
+                const order = response.data.order;
+                console.log('orderis',response.data.order);
+                setOrder(order);
+                dispatch(clearCart())
                 alert("Order created ");
-                await refetch();
-                navigate('/dashboard');
-                console.log(selectedAddress);
+                //await refetch();
+                //console.log("id",order._id);
+                navigate(`/success/${order._id}`);
+                //console.log(selectedAddress);
             } catch (error) {
                 console.log("Failed to submit order", error);
             }
@@ -65,11 +70,11 @@ const OrderSummary = ({isCheckout, selectedAddress}) => {
                     onClick={(e) => {
                         e.stopPropagation();
                         makePayment();
-                       
                     }}
                     className='bg-green-600 px-3 py-1.5 text-white  mt-2 rounded-md flex justify-between items-center'><span className='mr-2'>Proceed Checkout</span><i className="ri-bank-card-line"></i></button>}
                 </div>
             </div>
+            {order &&  <PaymentSuccess order = {order} />}
         </div>
     )
 }
